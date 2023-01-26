@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "sXiBGuFJgy+mu8p8N5DQWBJUvlMo9Iku1iuqu9mZC7lHmz9ZCKIRlDuL3zVa9nf5k/5OI75CIDfK08B0TyA3Fg==",
+  "success": true,
+  "projectFilePath": "/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/WaiterAvailabilityApp.csproj",
+  "expectedPackageFiles": [
+    "/home/codex/.nuget/packages/dapper/2.0.123/dapper.2.0.123.nupkg.sha512",
+    "/home/codex/.nuget/packages/microsoft.extensions.logging.abstractions/6.0.0/microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
+    "/home/codex/.nuget/packages/npgsql/7.0.1/npgsql.7.0.1.nupkg.sha512",
+    "/home/codex/.nuget/packages/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

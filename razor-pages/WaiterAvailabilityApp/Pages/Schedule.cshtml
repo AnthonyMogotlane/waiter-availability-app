@@ -1,0 +1,33 @@
+﻿@page
+@model ScheduleModel
+@{
+    ViewData["Title"] = "Schedule page";
+}
+
+<div class="">
+    <h1 class="display-4 text-center">Schedule</h1>
+    <p class="text-center">Weekly Waiter Shifts</p>
+
+    <table class="table table-bordered bg-light rounded">
+        <thead>
+            <tr>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var day in Model.Schedule)
+            {
+                <tr>
+                    <td>
+                        <h5>@day.Key</h5>
+                    </td>
+
+                    @foreach (var today in @day.Value)
+                    {
+                        <td class="text-center">@today</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

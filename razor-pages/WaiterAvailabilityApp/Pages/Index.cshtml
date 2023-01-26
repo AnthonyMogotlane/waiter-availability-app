@@ -1,0 +1,34 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="d-flex justify-content-center text-center">
+    <form method="post" class="w-25">
+
+    <table class="table bg-light rounded">
+        <thead>
+        </thead>
+        <tbody>
+            @foreach (var day in Model.weekdays)
+            {
+                <tr>
+                    <td>
+
+                    <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key">
+                    </td>
+                    <td>
+                        <label>@day.Value</label>
+
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+                <br />
+    </table>
+
+        <input type="submit" class="btn btn-success">
+    </form>
+</div>

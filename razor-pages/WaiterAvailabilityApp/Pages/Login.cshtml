@@ -1,0 +1,20 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="row d-flex justify-content-center">
+    <h3 class="display-5 text-center">Welcome To Waiter's App</h3>
+    <div class="col-6">
+        <div class="card p-5 pb-2">
+            <form class="form-group" method="post">
+                <span asp-validation="waiter.FirstName" class="text-danger">Required</span>
+                <input type="text" class="form-control" asp-for="waiter.FirstName" placeholder="Enter your name, e.g Anthony">
+                <input type="submit" asp-action="username" class="btn btn-success m-4" value="login">
+            </form>
+        </div>
+    </div>
+    
+
+</div>

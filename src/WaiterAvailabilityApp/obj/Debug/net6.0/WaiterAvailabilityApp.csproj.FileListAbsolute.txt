@@ -1,0 +1,12 @@
+/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/bin/Debug/net6.0/WaiterAvailabilityApp.deps.json
+/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/bin/Debug/net6.0/WaiterAvailabilityApp.dll
+/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/bin/Debug/net6.0/WaiterAvailabilityApp.pdb
+/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/obj/Debug/net6.0/WaiterAvailabilityApp.csproj.AssemblyReference.cache
+/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/obj/Debug/net6.0/WaiterAvailabilityApp.GeneratedMSBuildEditorConfig.editorconfig
+/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/obj/Debug/net6.0/WaiterAvailabilityApp.AssemblyInfoInputs.cache
+/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/obj/Debug/net6.0/WaiterAvailabilityApp.AssemblyInfo.cs
+/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/obj/Debug/net6.0/WaiterAvailabilityApp.csproj.CoreCompileInputs.cache
+/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/obj/Debug/net6.0/WaiterAvailabilityApp.dll
+/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/obj/Debug/net6.0/refint/WaiterAvailabilityApp.dll
+/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/obj/Debug/net6.0/WaiterAvailabilityApp.pdb
+/home/codex/Desktop/decesion-inc/projects/waiter-availability-app/src/WaiterAvailabilityApp/obj/Debug/net6.0/ref/WaiterAvailabilityApp.dll
