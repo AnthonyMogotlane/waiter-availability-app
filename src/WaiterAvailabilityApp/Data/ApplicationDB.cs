@@ -8,6 +8,7 @@ public class ApplicationDB : IWaiterAvailability
     private string? ConnectionString { get; set; }
 
     private string? Name { get; set; } // Name of the current user
+    private List<string> WorkingDays { get; set; }
 
     // Day of the week
     private static List<string> monday = new List<string>();
@@ -29,10 +30,14 @@ public class ApplicationDB : IWaiterAvailability
         {"Saturday", saturday},
         {"Sunday", sunday},
     };
-    public ApplicationDB(string connectionString) => this.ConnectionString = connectionString;
+    public ApplicationDB(string connectionString) {
+        this.ConnectionString = connectionString;
+        this.WorkingDays = new List<string>();
+    }
 
     public void CurrentUser(string name) => this.Name = name; // Setting the name of the current user/waiter
     public string GetName() => Name!;
+    public List<string> GetWorkingDays() => WorkingDays;
     
     // Add to Schedule table
     public void AddToSchedule(List<int> checkedDays)
@@ -73,8 +78,17 @@ public class ApplicationDB : IWaiterAvailability
             if(!schedule![item.Day!].Contains(item.FirstName!))
                 schedule![item.Day!].Add(item.FirstName!);
         }
+
+        foreach (var item in result.ToList())
+        {
+            if(item.FirstName == this.Name && !WorkingDays.Contains(item.Day!))
+                WorkingDays.Add(item.Day!);
+        }
+
     }
-    
+
+    public void ClearWorkingDays() => WorkingDays.Clear();
+
     public Dictionary<string, List<string>> GetSchedule() => schedule!;
     public void ClearSchedule() 
     {
