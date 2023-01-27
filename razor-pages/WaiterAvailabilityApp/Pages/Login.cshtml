@@ -11,10 +11,15 @@
             <form class="form-group" method="post">
                 <span asp-validation="waiter.FirstName" class="text-danger">Required</span>
                 <input type="text" class="form-control" asp-for="waiter.FirstName" placeholder="Enter your name, e.g Anthony">
-                <input type="submit" asp-action="username" class="btn btn-success m-4" value="login">
+                <input type="submit" class="btn btn-success m-4" value="login">
             </form>
         </div>
     </div>
     
 
 </div>
+
+
+@section scripts{
+   <partial name="_ValidationScriptsPartial" />
+}

@@ -4,31 +4,62 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="d-flex justify-content-center text-center">
-    <form method="post" class="w-25">
+<div class="row">
+    <h3>Hi @Model.Waiter.FirstName</h3>
+    <p>Select your working days</p>
+</div>
+<div class="row">
+    <div class="col-6">
+        <form method="post" class="w-50">
+            <table class="table bg-light rounded">
+                <thead>
+                </thead>
+                <tbody>
+                    @foreach (var day in Model.weekdays)
+                    {
+                        <tr>
+                            @if(Model.WorkingDays.Contains(day.Value))
+                            {
+                                <td>
+                                    <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key" checked>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key">
+                                </td>
+                            }
+                                <td>
+                                    <label>@day.Value</label>
+                                </td>
+                        </tr>
+                    }
+                    
+                </tbody>
+            </table>
 
-    <table class="table bg-light rounded">
-        <thead>
-        </thead>
-        <tbody>
-            @foreach (var day in Model.weekdays)
-            {
-                <tr>
-                    <td>
-
-                    <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key">
-                    </td>
-                    <td>
-                        <label>@day.Value</label>
-
-                    </td>
-                </tr>
-
-            }
-        </tbody>
-                <br />
-    </table>
-
-        <input type="submit" class="btn btn-success">
-    </form>
+            <input type="submit" class="btn btn-success">
+        </form>
+    </div>
+    <div class="col-6">
+        @if(Model.WorkingDays.Count > 0)
+        {
+            <table class="table w-50" style="background-color: #grey;color: #fff;">
+                <tbody>
+                    <tr>
+                        <th>SELECTED DAYS</th>
+                    </tr>
+                    @foreach (var days in Model.WorkingDays)
+                    {
+                        <tr>
+                            <td>
+                                @days
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }    
+    </div>
 </div>

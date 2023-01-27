@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WaiterAvailabilityApp.Model;
 
 namespace WaiterAvailabilityApp.Pages;
 
@@ -8,8 +9,12 @@ public class IndexModel : PageModel
     private readonly ILogger<IndexModel> _logger;
     private readonly IWaiterAvailability _waiter;
 
+    [BindProperty(SupportsGet = true)]
+    public Waiter Waiter { get; set; }
+
     [BindProperty]
     public List<int> SelectedDays { get; set; } // To hold selected days by the waiter
+    public List<string> WorkingDays { get; set; }
 
     public Dictionary<int, string> weekdays = new Dictionary<int, string>()
     {
@@ -28,12 +33,23 @@ public class IndexModel : PageModel
         _waiter = waiter;
     }
 
+    public void Execute()
+    {
+        _waiter.CurrentUser(Waiter.FirstName!);
+        _waiter.ClearWorkingDays();
+        _waiter.GetData();
+        WorkingDays = _waiter.GetWorkingDays();
+    }
+
     public void OnGet()
     {
+        Execute();
     }
 
     public void OnPost()
     {
+        // Delete the previous data first
         _waiter.AddToSchedule(SelectedDays);
+        Execute();
     }
 }
