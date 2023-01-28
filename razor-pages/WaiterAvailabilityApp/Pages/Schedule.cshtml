@@ -4,11 +4,13 @@
     ViewData["Title"] = "Schedule page";
 }
 
-<div class="">
+<div class="col-8">
     <h1 class="display-4 text-center">Schedule</h1>
-    <p class="text-center">Weekly Waiter Shifts</p>
+    <p class="text-center">Weekly Waiter's Shifts</p>
 
-    <table class="table table-bordered bg-light rounded">
+    <div class="clear-pop bg-success w-25 text-center rounded my-1">Schedule cleared</div>
+
+    <table class="table table-bordered bg-light">
         <thead>
             <tr>
                 
@@ -30,4 +32,19 @@
             }
         </tbody>
     </table>
+    <form asp-page-handler="clear" method="post">
+        <button class="clear-btn btn btn-danger">Clear Schedule</button>
+    </form>
 </div>
+
+
+@section scripts{
+    <script>
+       
+
+       
+
+
+    </script>
+}
+ 
