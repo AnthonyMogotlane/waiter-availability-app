@@ -35,3 +35,8 @@ body::after {
   opacity: .7;
   z-index: -1;
 }
+
+/* Index table */
+.status-th {
+  font-style: italic;
+}
