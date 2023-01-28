@@ -20,14 +20,17 @@ public class ScheduleModel : PageModel
 
     public void OnGet()
     {  
-        // _waiter.ClearSchedule();
         _waiter.GetData();
         Schedule = _waiter.GetSchedule();
+         Console.WriteLine(Schedule["Monday"].Count);
     }
 
-    public void OnPost()
+    public IActionResult OnPostClear()
     {
-        _waiter.ClearSchedule();
+        _waiter.ClearSchedule(); // Clear from the database
+        _waiter.ClearLocalData(); // Clear local store data
+        _waiter.GetData();
         Schedule = _waiter.GetSchedule();
+        return Page();
     }
 }
