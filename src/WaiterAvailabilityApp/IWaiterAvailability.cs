@@ -11,4 +11,5 @@ public interface IWaiterAvailability
     Dictionary<string, List<string>> GetSchedule();
     public void ClearSchedule();
     public void ClearWorkingDays();
+    public void ClearLocalData();
 }
