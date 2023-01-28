@@ -95,7 +95,7 @@ public class ApplicationDB : IWaiterAvailability
         using NpgsqlConnection connection = new NpgsqlConnection(ConnectionString);
         connection.Open();
 
-        connection.Execute(@"DELETE FROM schedules");
+        connection.Execute(@"DELETE FROM schedule");
     }
 
     // Adding a new waiter into the database.
@@ -105,5 +105,14 @@ public class ApplicationDB : IWaiterAvailability
         connection.Open();
 
         connection.Execute(@"INSERT INTO waiters (firstname) VALUES (@FirstName)", new { FirstName = name });
+    }
+
+    // Clear local days data
+    public void ClearLocalData()
+    {
+        foreach (var day in schedule!)
+        {
+            day.Value.Clear();
+        }
     }
 }
