@@ -15,6 +15,7 @@ public class IndexModel : PageModel
     [BindProperty]
     public List<int> SelectedDays { get; set; } // To hold selected days by the waiter
     public List<string> WorkingDays { get; set; }
+    public Dictionary<string, List<string>> Schedule { get; set; }
 
     public Dictionary<int, string> weekdays = new Dictionary<int, string>()
     {
@@ -39,6 +40,7 @@ public class IndexModel : PageModel
         _waiter.ClearWorkingDays();
         _waiter.GetData();
         WorkingDays = _waiter.GetWorkingDays();
+        Schedule = _waiter.GetSchedule();
     }
 
     public void OnGet()
@@ -49,6 +51,7 @@ public class IndexModel : PageModel
     public void OnPost()
     {
         // Delete the previous data first
+        
         _waiter.AddToSchedule(SelectedDays);
         Execute();
     }

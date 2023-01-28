@@ -22,7 +22,6 @@ public class ScheduleModel : PageModel
     {  
         _waiter.GetData();
         Schedule = _waiter.GetSchedule();
-         Console.WriteLine(Schedule["Monday"].Count);
     }
 
     public IActionResult OnPostClear()

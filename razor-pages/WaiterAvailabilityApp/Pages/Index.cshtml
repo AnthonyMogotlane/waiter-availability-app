@@ -5,14 +5,19 @@
 }
 
 <div class="row">
-    <h3>Hi @Model.Waiter.FirstName</h3>
-    <p>Select your working days</p>
 </div>
-<div class="row">
-    <div class="col-6">
-        <form method="post" class="w-50">
+<div class="row d-flex justify-content-center">
+    <div class="col-12 col-md-4">
+        <h3>Hi @Model.Waiter.FirstName</h3>
+        <p>Select your working days</p>
+        <form method="post" class="">
             <table class="table bg-light rounded">
                 <thead>
+                    <tr>
+                        <th><i class="bi bi-check2-square"></i></th>
+                        <th><i class="bi bi-calendar-event-fill"></th>
+                        <th class="status-th">Status</th>
+                    </tr>
                 </thead>
                 <tbody>
                     @foreach (var day in Model.weekdays)
@@ -20,29 +25,47 @@
                         <tr>
                             @if(Model.WorkingDays.Contains(day.Value))
                             {
-                                <td>
+                                <td style="width: 25%">
                                     <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key" checked>
                                 </td>
                             }
                             else
                             {
-                                <td>
+                                <td style="width: 25%">
                                     <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key">
                                 </td>
                             }
-                                <td>
+                                <td style="width: 50%">
                                     <label>@day.Value</label>
                                 </td>
+                                @if(Model.Schedule[day.Value].Count >= 3)
+                                {
+                                    <td style="width: 25%">
+                                        <label><i class="bi bi-x-circle-fill text-danger"></i></label>
+                                    </td>
+                                }
+                                else
+                                {
+                                     <td style="width: 25%">
+                                        <label><i class="bi bi-circle-fill text-success"></i></label>
+                                    </td>
+                                }
                         </tr>
                     }
                     
                 </tbody>
             </table>
-
-            <input type="submit" class="btn btn-success">
+            @if(Model.WorkingDays.Count > 0)
+            {
+                <input type="submit" class="btn btn-primary" value="Update">
+            }
+            else
+            {
+                <input type="submit" class="btn btn-success">
+            }
         </form>
     </div>
-    <div class="col-6">
+    <div class="col-12 col-md-4">
         @if(Model.WorkingDays.Count > 0)
         {
             <table class="table w-50" style="background-color: #grey;color: #fff;">
