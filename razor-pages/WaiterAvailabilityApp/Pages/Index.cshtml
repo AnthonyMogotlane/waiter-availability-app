@@ -10,7 +10,10 @@
     <div class="col-12 col-md-4">
         <h3>Hi @Model.Waiter.FirstName</h3>
         <p>Select your working days</p>
-        <form method="post" class="">
+        <form method="post">
+
+            <input type="hidden" name="WaiterName" value="@Model.Waiter.FirstName">
+
             <table class="table bg-light rounded">
                 <thead>
                     <tr>
@@ -58,6 +61,7 @@
             @if(Model.WorkingDays.Count > 0)
             {
                 <input type="submit" class="btn btn-primary" value="Update">
+                <input asp-page-handler="reset" type="submit" class="btn btn-danger" value="Reset">
             }
             else
             {

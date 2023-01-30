@@ -13,6 +13,10 @@ public class IndexModel : PageModel
     public Waiter Waiter { get; set; }
 
     [BindProperty]
+    public string WaiterName {get;set;}
+
+
+    [BindProperty]
     public List<int> SelectedDays { get; set; } // To hold selected days by the waiter
     public List<string> WorkingDays { get; set; }
     public Dictionary<string, List<string>> Schedule { get; set; }
@@ -50,9 +54,15 @@ public class IndexModel : PageModel
 
     public void OnPost()
     {
-        // Delete the previous data first
-        
+        _waiter.DeleteDays(Waiter.FirstName!); // If there are days selected, delete them to allow update.
         _waiter.AddToSchedule(SelectedDays);
         Execute();
+    }
+
+    public IActionResult OnPostReset()
+    {
+        _waiter.DeleteDays(WaiterName);
+        Execute();
+        return Redirect($"/?FirstName={WaiterName}");
     }
 }
