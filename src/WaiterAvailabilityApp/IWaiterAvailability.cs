@@ -12,4 +12,5 @@ public interface IWaiterAvailability
     public void ClearSchedule();
     public void ClearWorkingDays();
     public void ClearLocalData();
+    public string DeleteDays(string name);
 }

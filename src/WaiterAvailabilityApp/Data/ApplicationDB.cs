@@ -30,7 +30,8 @@ public class ApplicationDB : IWaiterAvailability
         {"Saturday", saturday},
         {"Sunday", sunday},
     };
-    public ApplicationDB(string connectionString) {
+    public ApplicationDB(string connectionString)
+    {
         this.ConnectionString = connectionString;
         this.WorkingDays = new List<string>();
     }
@@ -38,7 +39,7 @@ public class ApplicationDB : IWaiterAvailability
     public void CurrentUser(string name) => this.Name = name; // Setting the name of the current user/waiter
     public string GetName() => Name!;
     public List<string> GetWorkingDays() => WorkingDays;
-    
+
     // Add to Schedule table
     public void AddToSchedule(List<int> checkedDays)
     {
@@ -75,13 +76,13 @@ public class ApplicationDB : IWaiterAvailability
         // Adding data from DB to schedule
         foreach (var item in result.ToList())
         {
-            if(!schedule![item.Day!].Contains(item.FirstName!))
+            if (!schedule![item.Day!].Contains(item.FirstName!))
                 schedule![item.Day!].Add(item.FirstName!);
         }
 
         foreach (var item in result.ToList())
         {
-            if(item.FirstName == this.Name && !WorkingDays.Contains(item.Day!))
+            if (item.FirstName == this.Name && !WorkingDays.Contains(item.Day!))
                 WorkingDays.Add(item.Day!);
         }
 
@@ -90,7 +91,7 @@ public class ApplicationDB : IWaiterAvailability
     public void ClearWorkingDays() => WorkingDays.Clear();
 
     public Dictionary<string, List<string>> GetSchedule() => schedule!;
-    public void ClearSchedule() 
+    public void ClearSchedule()
     {
         using NpgsqlConnection connection = new NpgsqlConnection(ConnectionString);
         connection.Open();
@@ -114,5 +115,22 @@ public class ApplicationDB : IWaiterAvailability
         {
             day.Value.Clear();
         }
+    }
+
+    // Delete waiter's selected days
+    public string DeleteDays(string name)
+    {
+        using NpgsqlConnection connection = new NpgsqlConnection(ConnectionString);
+        connection.Open();
+
+        var result = connection.QueryFirst(
+            @"SELECT * FROM waiters WHERE firstname = @FirstName",
+            new { FirstName = name }); // DapperRow
+
+        int waiterId = result.id;
+
+        connection.Execute(@"DELETE FROM schedule WHERE waiter_id = @WaiterId", new { WaiterId = waiterId});
+
+        return $"{name}'s selected days deleted";
     }
 }
