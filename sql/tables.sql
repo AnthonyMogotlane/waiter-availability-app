@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS weekdays (
+CREATE TABLE IF NOT EXISTS weekdays(
     id serial PRIMARY KEY,
     day VARCHAR(50) NOT NULL
 );

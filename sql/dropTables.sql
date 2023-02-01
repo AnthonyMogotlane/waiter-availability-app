@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS schedule;
+DROP TABLE IF EXISTS waiters;
+DROP TABLE IF EXISTS weekdays;
