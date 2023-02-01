@@ -23,8 +23,7 @@ public class LoginModel : PageModel
         {
             return Redirect($"/?FirstName={waiter.FirstName}");
         }
-            ModelState.Clear();
-
+        ModelState.Clear();
         return Page();
     }
 }

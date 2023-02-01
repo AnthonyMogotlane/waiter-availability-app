@@ -12,7 +12,7 @@
         <p>Select your working days</p>
         <form method="post">
 
-            <input type="hidden" name="WaiterName" value="@Model.Waiter.FirstName">
+            <input type="hidden" name="WaiterFirstName" value="@Model.Waiter.FirstName">
 
             <table class="table bg-light rounded">
                 <thead>
@@ -26,7 +26,8 @@
                     @foreach (var day in Model.weekdays)
                     {
                         <tr>
-                            @if(Model.WorkingDays.Contains(day.Value))
+                            
+                            @if(Model.WaiterWorkingDays.Contains(day.Value))
                             {
                                 <td style="width: 25%">
                                     <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key" checked>
@@ -38,27 +39,27 @@
                                     <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key">
                                 </td>
                             }
-                                <td style="width: 50%">
-                                    <label>@day.Value</label>
-                                </td>
-                                @if(Model.Schedule[day.Value].Count >= 3)
-                                {
-                                    <td style="width: 25%">
+                            
+                            <td style="width: 50%">
+                                <label>@day.Value</label>
+                            </td>
+
+                                    @* <td style="width: 25%">
                                         <label><i class="bi bi-x-circle-fill text-danger"></i></label>
-                                    </td>
-                                }
-                                else
-                                {
+                                    </td> *@
+                              
+                                
                                      <td style="width: 25%">
                                         <label><i class="bi bi-circle-fill text-success"></i></label>
                                     </td>
-                                }
+                                
                         </tr>
                     }
                     
                 </tbody>
             </table>
-            @if(Model.WorkingDays.Count > 0)
+
+            @if(Model.WaiterWorkingDays.Count() > 0)
             {
                 <input type="submit" class="btn btn-primary" value="Update">
                 <input asp-page-handler="reset" type="submit" class="btn btn-danger" value="Reset">
@@ -67,17 +68,20 @@
             {
                 <input type="submit" class="btn btn-success">
             }
+           
+            
+            
         </form>
     </div>
     <div class="col-12 col-md-4">
-        @if(Model.WorkingDays.Count > 0)
+        @if(Model.WaiterWorkingDays.Count() > 0)
         {
             <table class="table w-50" style="background-color: #grey;color: #fff;">
                 <tbody>
                     <tr>
                         <th>SELECTED DAYS</th>
                     </tr>
-                    @foreach (var days in Model.WorkingDays)
+                    @foreach (var days in Model.WaiterWorkingDays)
                     {
                         <tr>
                             <td>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WaiterAvailabilityApp;
+using WaiterAvailabilityApp.Model;
 
 namespace WaiterAvailabilityApp.Pages;
 
@@ -16,20 +17,17 @@ public class ScheduleModel : PageModel
     }
 
     // Schedule - weekly waiter shift
-    public Dictionary<string, List<string>> Schedule { get; set; }
+    public IEnumerable<IGrouping<string?, Schedule>> Schedule { get; set; }
 
     public void OnGet()
     {  
-        _waiter.GetData();
-        Schedule = _waiter.GetSchedule();
+        Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
     }
 
     public IActionResult OnPostClear()
     {
         _waiter.ClearSchedule(); // Clear from the database
-        _waiter.ClearLocalData(); // Clear local store data
-        _waiter.GetData();
-        Schedule = _waiter.GetSchedule();
+        Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
         return Page();
     }
 }

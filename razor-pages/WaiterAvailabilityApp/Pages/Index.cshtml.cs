@@ -13,12 +13,12 @@ public class IndexModel : PageModel
     public Waiter Waiter { get; set; }
 
     [BindProperty]
-    public string WaiterName {get;set;}
+    public string WaiterFirstName {get;set;}
 
 
     [BindProperty]
     public List<int> SelectedDays { get; set; } // To hold selected days by the waiter
-    public List<string> WorkingDays { get; set; }
+    public IEnumerable<string> WaiterWorkingDays { get; set; }
     public Dictionary<string, List<string>> Schedule { get; set; }
 
     public Dictionary<int, string> weekdays = new Dictionary<int, string>()
@@ -38,31 +38,22 @@ public class IndexModel : PageModel
         _waiter = waiter;
     }
 
-    public void Execute()
-    {
-        _waiter.CurrentUser(Waiter.FirstName!);
-        _waiter.ClearWorkingDays();
-        _waiter.GetData();
-        WorkingDays = _waiter.GetWorkingDays();
-        Schedule = _waiter.GetSchedule();
-    }
-
     public void OnGet()
     {
-        Execute();
+        WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
     }
 
     public void OnPost()
     {
-        _waiter.DeleteDays(Waiter.FirstName!); // If there are days selected, delete them to allow update.
-        _waiter.AddToSchedule(SelectedDays);
-        Execute();
+        _waiter.ResertDays(Waiter.FirstName!);
+        _waiter.AddToSchedule(Waiter.FirstName!, SelectedDays);
+        WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
     }
 
     public IActionResult OnPostReset()
     {
-        _waiter.DeleteDays(WaiterName);
-        Execute();
-        return Redirect($"/?FirstName={WaiterName}");
+        _waiter.ResertDays(WaiterFirstName);    
+        WaiterWorkingDays = _waiter.WaiterWorkingDays(WaiterFirstName).Select(x => x.Day)!;
+        return Redirect($"/?FirstName={WaiterFirstName}");
     }
 }

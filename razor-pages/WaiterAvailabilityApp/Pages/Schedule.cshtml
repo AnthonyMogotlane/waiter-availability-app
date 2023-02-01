@@ -29,9 +29,9 @@
                         <h5>@day.Key</h5>
                     </td>
 
-                    @foreach (var today in @day.Value)
+                    @foreach (var today in @day)
                     {
-                        <td class="text-center">@today</td>
+                        <td class="text-center">@today.FirstName</td>
                     }
                 </tr>
             }
