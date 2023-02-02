@@ -7,18 +7,18 @@
 /* 
     Schedule page 
 */
-const clearPop = document.querySelector(".clear-pop");
-const clearBtn = document.querySelector(".clear-btn");
+// const clearPop = document.querySelector(".clear-pop");
+// const clearBtn = document.querySelector(".clear-btn");
 
-// Hide
-clearPop.style.visibility = "hidden";
+// // Hide
+// clearPop.style.visibility = "hidden";
 
-// Show - for 3s
-clearBtn.addEventListener("click", () => {
-    clearPop.style.visibility = "visible";
+// // Show - for 3s
+// clearBtn.addEventListener("click", () => {
+//     clearPop.style.visibility = "visible";
 
-    // setTimeout(() => {
-    //     clearPop.style.visibility = "hidden";   
-    // }, 3000);
-})
+//     // setTimeout(() => {
+//     //     clearPop.style.visibility = "hidden";   
+//     // }, 3000);
+// })
 /*--------------------------------------------------------*/
