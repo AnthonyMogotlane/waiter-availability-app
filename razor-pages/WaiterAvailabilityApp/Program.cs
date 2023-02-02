@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<IWaiterAvailability, ApplicationDB>(x => 
-    new ApplicationDB("Server=localhost;Port=5432;Database=waiter_db;UserId=postgres;Password=0000"));
+    new ApplicationDB(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
