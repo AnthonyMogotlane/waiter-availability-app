@@ -56,16 +56,27 @@ public class IndexModel : PageModel
 
     public void OnPost()
     {
-        _waiter.ResertDays(Waiter.FirstName!);
-        _waiter.AddToSchedule(Waiter.FirstName!, SelectedDays);
-        WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
-        GetWeekDayStatus();
+        if(SelectedDays.Count > 0 && SelectedDays.Count <= 4)
+        {
+            _waiter.ResertDays(Waiter.FirstName!);
+            _waiter.AddToSchedule(Waiter.FirstName!, SelectedDays);
+            WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
+            GetWeekDayStatus();
+            TempData["submit"] = "Days submitted successfully";
+        }
+        else
+        {
+            WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
+            GetWeekDayStatus();
+            TempData["message"] = "Minimum days to 1, Maximum days to 5";
+        }
     }
 
     public IActionResult OnPostReset()
     {
         _waiter.ResertDays(WaiterFirstName);    
         WaiterWorkingDays = _waiter.WaiterWorkingDays(WaiterFirstName).Select(x => x.Day)!;
+        TempData["reset"] = "Days reseted successfully";
         return Redirect($"/?FirstName={WaiterFirstName}");
     }
 }

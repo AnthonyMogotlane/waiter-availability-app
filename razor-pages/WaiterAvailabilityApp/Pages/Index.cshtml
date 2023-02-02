@@ -4,12 +4,27 @@
     ViewData["Title"] = "Home page";
 }
 
+
 <div class="row">
 </div>
 <div class="row d-flex justify-content-center">
     <div class="col-12 col-md-4">
         <h3>Hi @Model.Waiter.FirstName</h3>
         <p>Select your working days</p>
+
+        @if(TempData["submit"] != null)
+        {
+            <div class="clear-pop bg-success w-100 text-center rounded my-1 p-1">@TempData["submit"]</div>
+        }
+        else if(TempData["reset"] != null)
+        {
+            <div class="clear-pop bg-success w-100 text-center rounded my-1 p-1">@TempData["reset"]</div>
+        }
+        else if(TempData["message"] != null)
+        {
+            <div class="clear-pop bg-danger w-100 text-center rounded my-1 p-1">@TempData["message"]</div>
+        }
+
         <form method="post">
 
             <input type="hidden" name="WaiterFirstName" value="@Model.Waiter.FirstName">
@@ -26,11 +41,16 @@
                     @foreach (var day in Model.weekdays)
                     {
                         <tr>
-                            
-                            @if(Model.WaiterWorkingDays.Contains(day.Value))
+                            @if (Model.WaiterWorkingDays.Contains(day.Value))
                             {
                                 <td style="width: 25%">
-                                    <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key" checked>
+                                    <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key" checked >
+                                </td>
+                            }
+                            else if (Model.WeekDayStatus.ContainsKey(day.Value) && Model.WeekDayStatus[day.Value] >= 3)
+                            {
+                                <td style="width: 25%">
+                                    <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key"  disabled>
                                 </td>
                             }
                             else
@@ -39,11 +59,12 @@
                                     <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key">
                                 </td>
                             }
-                            
+
                             <td style="width: 50%">
                                 <label>@day.Value</label>
                             </td>
-                            @if(Model.WeekDayStatus.ContainsKey(day.Value) && Model.WeekDayStatus[day.Value] >= 3)
+
+                            @if (Model.WeekDayStatus.ContainsKey(day.Value) && Model.WeekDayStatus[day.Value] >= 3)
                             {
                                 <td style="width: 25%">
                                     <label><i class="bi bi-x-circle-fill text-danger"></i></label>
@@ -54,15 +75,14 @@
                                 <td style="width: 25%">
                                     <label><i class="bi bi-circle-fill text-success"></i></label>
                                 </td>
-                            }
-                              
+                            }  
                         </tr>
                     }
-                    
+
                 </tbody>
             </table>
 
-            @if(Model.WaiterWorkingDays.Count() > 0)
+            @if (Model.WaiterWorkingDays.Count() > 0)
             {
                 <input type="submit" class="btn btn-primary" value="Update">
                 <input asp-page-handler="reset" type="submit" class="btn btn-danger" value="Reset">
@@ -71,29 +91,41 @@
             {
                 <input type="submit" class="btn btn-success">
             }
-           
-            
-            
+
         </form>
     </div>
     <div class="col-12 col-md-4">
-        @if(Model.WaiterWorkingDays.Count() > 0)
+        @if (Model.WaiterWorkingDays.Count() > 0)
         {
             <table class="table w-50" style="background-color: #grey;color: #fff;">
                 <tbody>
                     <tr>
                         <th>SELECTED DAYS</th>
                     </tr>
-                    @foreach (var days in Model.WaiterWorkingDays)
-                    {
-                        <tr>
-                            <td>
-                                @days
-                            </td>
-                        </tr>
-                    }
+                @foreach (var days in Model.WaiterWorkingDays)
+                {
+                    <tr>
+                        <td>
+                            @days
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
         }    
     </div>
 </div>
+
+
+@section scripts {
+
+    <script>
+        const clearPop = document.querySelector(".clear-pop");
+        clearPop.style.visibility = "visible";
+
+        setTimeout(() => {
+            clearPop.style.visibility = "hidden";
+        }, 3000);
+    </script>
+
+}
