@@ -19,7 +19,9 @@ public class IndexModel : PageModel
     [BindProperty]
     public List<int> SelectedDays { get; set; } // To hold selected days by the waiter
     public IEnumerable<string> WaiterWorkingDays { get; set; }
-    public Dictionary<string, List<string>> Schedule { get; set; }
+    public IEnumerable<IGrouping<string?, Schedule>> Schedule { get; set; }
+    public Dictionary<string, int> WeekDayStatus { get; set; }
+
 
     public Dictionary<int, string> weekdays = new Dictionary<int, string>()
     {
@@ -38,9 +40,18 @@ public class IndexModel : PageModel
         _waiter = waiter;
     }
 
+    // Get how many waiters have booked for that day
+    public void GetWeekDayStatus()
+    {
+        Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
+        WeekDayStatus = new Dictionary<string, int>();
+        foreach (var group in Schedule) WeekDayStatus.Add(group.Key!, group.Count());
+    }
+
     public void OnGet()
     {
         WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
+        GetWeekDayStatus();
     }
 
     public void OnPost()
@@ -48,6 +59,7 @@ public class IndexModel : PageModel
         _waiter.ResertDays(Waiter.FirstName!);
         _waiter.AddToSchedule(Waiter.FirstName!, SelectedDays);
         WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
+        GetWeekDayStatus();
     }
 
     public IActionResult OnPostReset()
