@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "razor-pages", "razor-pages", "{57C5AC75-2F96-4991-A4E5-A8CD78AD4356}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaiterAvailabilityAppRazor", "razor-pages\WaiterAvailabilityApp\WaiterAvailabilityAppRazor.csproj", "{D511462F-E7C3-453A-92F7-98FAE78382FA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9CCE2073-34FD-44A4-BB07-1CE5CFD27C0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaiterAvailabilityApp", "src\WaiterAvailabilityApp\WaiterAvailabilityApp.csproj", "{49C73803-9194-4A0A-8AFB-F6FCD1F4BA57}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D511462F-E7C3-453A-92F7-98FAE78382FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D511462F-E7C3-453A-92F7-98FAE78382FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D511462F-E7C3-453A-92F7-98FAE78382FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D511462F-E7C3-453A-92F7-98FAE78382FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49C73803-9194-4A0A-8AFB-F6FCD1F4BA57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49C73803-9194-4A0A-8AFB-F6FCD1F4BA57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49C73803-9194-4A0A-8AFB-F6FCD1F4BA57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49C73803-9194-4A0A-8AFB-F6FCD1F4BA57}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D511462F-E7C3-453A-92F7-98FAE78382FA} = {57C5AC75-2F96-4991-A4E5-A8CD78AD4356}
+		{49C73803-9194-4A0A-8AFB-F6FCD1F4BA57} = {9CCE2073-34FD-44A4-BB07-1CE5CFD27C0E}
+	EndGlobalSection
+EndGlobal
