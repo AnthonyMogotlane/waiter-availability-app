@@ -54,21 +54,30 @@ public class IndexModel : PageModel
         GetWeekDayStatus();
     }
 
-    public void OnPost()
+    public IActionResult OnPost()
     {
-        if(SelectedDays.Count > 0 && SelectedDays.Count <= 4)
+        if(Waiter.FirstName == null) 
+        {
+            WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
+            GetWeekDayStatus();
+            TempData["login"] = "login";
+            return Page();
+        } 
+        else if(SelectedDays.Count > 0 && SelectedDays.Count <= 4)
         {
             _waiter.ResertDays(Waiter.FirstName!);
             _waiter.AddToSchedule(Waiter.FirstName!, SelectedDays);
             WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
             GetWeekDayStatus();
             TempData["submit"] = "Days submitted successfully";
+            return Page();
         }
         else
         {
             WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
             GetWeekDayStatus();
             TempData["message"] = "Minimum days to 1, Maximum days to 5";
+            return Page();  
         }
     }
 
@@ -77,6 +86,7 @@ public class IndexModel : PageModel
         _waiter.ResertDays(WaiterFirstName);    
         WaiterWorkingDays = _waiter.WaiterWorkingDays(WaiterFirstName).Select(x => x.Day)!;
         TempData["reset"] = "Days reseted successfully";
+
         return Redirect($"/?FirstName={WaiterFirstName}");
     }
 }
