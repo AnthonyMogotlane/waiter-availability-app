@@ -41,4 +41,9 @@ public class ScheduleModel : PageModel
         TempData["success"] = "Schedule cleared successfully";
         return Page();
     }
+
+    public IActionResult OnPostAccount(string name)
+    {
+        return Redirect($"/?FirstName={name}");
+    }
 }

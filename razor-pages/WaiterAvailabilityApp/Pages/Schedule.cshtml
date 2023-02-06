@@ -13,14 +13,10 @@
 
     @if(TempData["success"] != null )
     {
-        <div class="clear-pop bg-success w-50 text-center rounded my-1 p-1">@TempData["success"]</div>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script type="text/javascript">
-            const clearPop = document.querySelector(".clear-pop");
-            
-            setTimeout(() => {
-                clearPop.style.visibility = "hidden";   
-            }, 3000);
-
+            toastr.success('@TempData["success"]');
         </script>
     }
 
@@ -44,7 +40,12 @@
                         {
                             @foreach (var waiter in group)
                             {
-                                <td class="text-center">@waiter.FirstName</td>
+                                <td class="text-center">
+                                    <form asp-page-handler="account" method="post" >
+                                    <button class="btn-waiter">@waiter.FirstName</button>
+                                    <input type="hidden" name="name" value="@waiter.FirstName">
+                                    </form>
+                                </td>
                             }
                         }
                     }
