@@ -21,9 +21,9 @@ public class LoginModel : PageModel
     {
         if (ModelState.IsValid)
         {
+            ModelState.Clear();
             return Redirect($"/?FirstName={waiter.FirstName}");
         }
-        ModelState.Clear();
         return Page();
     }
 }
