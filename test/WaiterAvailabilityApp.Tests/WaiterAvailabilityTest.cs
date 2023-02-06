@@ -5,6 +5,7 @@ using Npgsql;
 using WaiterAvailabilityApp;
 using WaiterAvailabilityApp.Data;
 using WaiterAvailabilityApp.Model;
+using XUnit;
 
 namespace WaiterAvailabilityApp.Tests;
 
@@ -27,6 +28,7 @@ public class WaiterAvailabilityTest
     {
         using (var connection = new NpgsqlConnection(cs))
         {
+            var query = System.IO.File.ReadAllText("");
             connection.Execute(@"
                 CREATE TABLE IF NOT EXISTS weekdays (
                 id serial PRIMARY KEY,

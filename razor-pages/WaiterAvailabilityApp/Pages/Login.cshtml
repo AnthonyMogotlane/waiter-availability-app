@@ -4,19 +4,17 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="row d-flex justify-content-center">
+<div class="row d-flex justify-content-center align-items-center">
     <h3 class="display-5 text-center">Welcome To Waiter's App</h3>
-    <div class="col-6">
+    <div class="col-12 col-md-8 col-lg-6">
         <div class="card p-5 pb-2">
             <form class="form-group" method="post">
-                <span asp-validation="waiter.FirstName" class="text-danger">Required</span>
+                <span asp-validation-for="waiter.FirstName" class="text-danger"></span>
                 <input type="text" class="form-control" asp-for="waiter.FirstName" placeholder="Enter your name, e.g Anthony">
-                <input type="submit" class="btn btn-success m-4" value="login">
+                <input type="submit" class="btn btn-success my-4" value="login">
             </form>
         </div>
     </div>
-    
-
 </div>
 
 
