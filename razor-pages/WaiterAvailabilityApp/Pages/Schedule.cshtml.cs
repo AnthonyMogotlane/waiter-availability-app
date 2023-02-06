@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using WaiterAvailabilityApp;
 using WaiterAvailabilityApp.Model;
 
+
 namespace WaiterAvailabilityApp.Pages;
 
 public class ScheduleModel : PageModel

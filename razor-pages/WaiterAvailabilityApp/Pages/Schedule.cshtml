@@ -32,7 +32,7 @@
         <tbody>
             @foreach (var day in Model.weekdays)
             {
-                <tr>
+                <tr class="border-top">
                     <td><h5>@day</h5></td>
                     @foreach (var group in Model.Schedule)
                     {
@@ -42,7 +42,7 @@
                             {
                                 <td class="text-center">
                                     <form asp-page-handler="account" method="post" >
-                                    <button class="btn-waiter">@waiter.FirstName</button>
+                                    <button class="btn-waiter name-color">@waiter.FirstName</button>
                                     <input type="hidden" name="name" value="@waiter.FirstName">
                                     </form>
                                 </td>
