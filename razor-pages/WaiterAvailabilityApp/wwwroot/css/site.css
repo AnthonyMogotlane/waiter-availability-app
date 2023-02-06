@@ -54,3 +54,8 @@ body::after {
 li {
   list-style: none;
 }
+
+.btn-waiter {
+  border: none;
+  background: none;
+}
