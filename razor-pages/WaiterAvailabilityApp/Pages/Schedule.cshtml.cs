@@ -10,6 +10,9 @@ public class ScheduleModel : PageModel
 {
     private readonly ILogger<ScheduleModel> _logger;
     private IWaiterAvailability _waiter;
+
+    [BindProperty(SupportsGet = true)]
+    public Waiter Waiter { get; set; }
     public ScheduleModel(ILogger<ScheduleModel> logger, IWaiterAvailability waiter)
     {
         _logger = logger;
@@ -32,7 +35,15 @@ public class ScheduleModel : PageModel
 
     public void OnGet()
     {  
-        Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
+        if(Waiter.FirstName != null)
+        {
+            Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
+        }
+        else
+        {
+            TempData["login"] = "login";
+            Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
+        }
     }
 
     public IActionResult OnPostClear()
@@ -45,6 +56,6 @@ public class ScheduleModel : PageModel
 
     public IActionResult OnPostAccount(string name)
     {
-        return Redirect($"/?FirstName={name}");
+        return Redirect($"/Admin/?FirstName={name}");
     }
 }
