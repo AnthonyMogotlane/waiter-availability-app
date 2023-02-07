@@ -14,12 +14,11 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
   position: relative;
   background-image: url("../img/waiter-bg.jpg");
   background-repeat: no-repeat;
-  background-size: auto;
-  min-height: 100vh;
+  background-size: cover;
+  background-position: bottom right;
   height: 100%;
   color: #fff;
 }
@@ -31,6 +30,7 @@ body::after {
   left: 0;
   width: 100%;
   height: 100%;
+  min-height: 100vh;
   background-color: #222;
   opacity: .7;
   z-index: -1;
@@ -65,5 +65,17 @@ li {
 }
 
 .border-top {
-  border-top: solid .5px #9b9494"
+  border-top: solid .5px #9b9494;
+}
+
+.login-row {
+  min-height: 100vh;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.font-300 {
+  font-weight: 300;
 }
