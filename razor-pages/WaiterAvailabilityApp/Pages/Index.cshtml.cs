@@ -63,7 +63,7 @@ public class IndexModel : PageModel
             TempData["login"] = "login";
             return Page();
         } 
-        else if(SelectedDays.Count > 0 && SelectedDays.Count <= 4)
+        else if(SelectedDays.Count > 0 && SelectedDays.Count <= 5)
         {
             _waiter.ResertDays(Waiter.FirstName!);
             _waiter.AddToSchedule(Waiter.FirstName!, SelectedDays);
@@ -76,7 +76,7 @@ public class IndexModel : PageModel
         {
             WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
             GetWeekDayStatus();
-            TempData["message"] = "Minimum days to 1, Maximum days to 5";
+            TempData["message"] = "Minimum days to work is 1, Maximum days to work is 5";
             return Page();  
         }
     }
