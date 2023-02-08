@@ -4,9 +4,9 @@ using WaiterAvailabilityApp.Model;
 
 namespace WaiterAvailabilityApp.Pages;
 
-public class IndexModel : PageModel
+public class AdminModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger;
+    private readonly ILogger<AdminModel> _logger;
     private readonly IWaiterAvailability _waiter;
 
     [BindProperty(SupportsGet = true)]
@@ -34,7 +34,7 @@ public class IndexModel : PageModel
         {7, "Sunday"}
     };
 
-    public IndexModel(ILogger<IndexModel> logger, IWaiterAvailability waiter)
+    public AdminModel(ILogger<AdminModel> logger, IWaiterAvailability waiter)
     {
         _logger = logger;
         _waiter = waiter;
@@ -87,6 +87,11 @@ public class IndexModel : PageModel
         WaiterWorkingDays = _waiter.WaiterWorkingDays(WaiterFirstName).Select(x => x.Day)!;
         TempData["reset"] = "Days reseted successfully";
 
-        return Redirect($"/?FirstName={WaiterFirstName}");
+        return Redirect($"/Admin/?FirstName={WaiterFirstName}");
+    }
+
+    public IActionResult OnPostAdmin()
+    {
+        return Redirect("/Schedule/?FirstName=Admin");
     }
 }

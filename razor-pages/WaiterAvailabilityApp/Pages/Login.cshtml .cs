@@ -22,7 +22,14 @@ public class LoginModel : PageModel
         if (ModelState.IsValid)
         {
             ModelState.Clear();
-            return Redirect($"/?FirstName={waiter.FirstName}");
+            if(waiter.FirstName == "Admin")
+            {
+                return Redirect($"/Schedule/?FirstName={waiter.FirstName}");
+            }
+            else
+            {
+                return Redirect($"/?FirstName={waiter.FirstName}");
+            }
         }
         return Page();
     }

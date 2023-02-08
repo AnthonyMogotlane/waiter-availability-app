@@ -1,5 +1,5 @@
 ﻿@page
-@model IndexModel
+@model AdminModel
 @{
     ViewData["Title"] = "Home page";
 }
@@ -13,12 +13,19 @@
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav w-100 justify-content-between">
-                    <li class="nav-item">
-                     @if(Model.Waiter.FirstName != null)
-                        {
-                            <a class="nav-link text-dark bg-light rounded">@Model.Waiter.FirstName![0]</a>
-                        }
-                    </li>
+                    <div class="d-flex">
+                        <li class="nav-item">
+                            @if (Model.Waiter.FirstName != null)
+                            {
+                                <a class="nav-link text-dark bg-light rounded">Admin</a>
+                            }
+                        </li>
+                        <li>
+                            <form method="post" asp-page-handler="Admin">
+                                <button class="nav-link btn-waiter text-dark">Schedule</button>
+                            </form>
+                        </li>
+                    </div>
                     <li class="">
                         @if (Model.Waiter.FirstName != null)
                         {
@@ -35,18 +42,15 @@
     </nav>
 </header>
 
-
 <div class="row">
 </div>
 <div class="row d-flex justify-content-center">
     <div class="col-12 col-md-4">
-        <h3>Hi @Model.Waiter.FirstName</h3>
-        <p>Select your working days</p>
-
+        <h3>@Model.Waiter.FirstName</h3>
         @if (TempData["login"] != null)
         {
-            <div class="modal-container d-flex justify-content-center align-items-center login-row">
-                <div class="card text-dark p-4 modal-pop">
+            <div class="modal-container d-flex justify-content-center align-items-center">
+                <div class="card text-dark p-4">
                     You need to "login" to select days
                     <a class="btn btn-primary" asp-page="/Login">login</a>
                     <a asp-page="/">Home</a>

@@ -4,13 +4,13 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="row d-flex justify-content-center align-items-center">
-    <h3 class="display-5 text-center">Welcome To Waiter's App</h3>
-    <div class="col-12 col-md-8 col-lg-6">
+<div class="row d-flex justify-content-center align-items-center login-row">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
         <div class="card p-5 pb-2">
+            <h1 class="display-6 text-center text-dark mb-4 status-th">Waiter's App</h1>
             <form class="form-group" method="post">
                 <span asp-validation-for="waiter.FirstName" class="text-danger"></span>
-                <input type="text" class="form-control" asp-for="waiter.FirstName" placeholder="Enter your name, e.g Anthony">
+                <input type="text" class="form-control" asp-for="waiter.FirstName" placeholder="Enter your login name">
                 <input type="submit" class="btn btn-success my-4" value="login">
             </form>
         </div>
@@ -19,5 +19,5 @@
 
 
 @section scripts{
-   <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }
