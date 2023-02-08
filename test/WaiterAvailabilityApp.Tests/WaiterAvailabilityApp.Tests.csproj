@@ -25,6 +25,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\WaiterAvailabilityApp\WaiterAvailabilityApp.csproj" />
+    <Content Include="sql\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
