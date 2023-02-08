@@ -1,4 +1,5 @@
 # Waiter Availability App
+[![.NET](https://github.com/AnthonyMogotlane/waiter-availability-app/actions/workflows/dotnet.yml/badge.svg)](https://github.com/AnthonyMogotlane/waiter-availability-app/actions/workflows/dotnet.yml)
 
 Waiter-Availability-App is an application to help restaurant managers to schedule weekly waiters shifts, it allows waiters to select days they can work on and update days they can work on. The manager can see how many waiters are available to work on and reset the schedule for a new week.
 
@@ -13,7 +14,7 @@ Project is created with:
 * Postgresql
 
 ## Live Demo
-[waitersavailabilityapp.com](http://waiters.anthony.projectcodex.net/)
+[waiters.anthony.projectcodex.net](http://waiters.anthony.projectcodex.net/)
 
 ## Getting started
 To run the app on your local computer:
