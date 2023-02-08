@@ -2,12 +2,12 @@ using Dapper;
 using Npgsql;
 using WaiterAvailabilityApp.Model;
 
-namespace WaiterAvailabilityApp.Data;
-public class ApplicationDB : IWaiterAvailability
+namespace WaiterAvailabilityApp;
+public class WaiterAvailability : IWaiterAvailability
 {
     private string? ConnectionString { get; set; }
 
-    public ApplicationDB(string connectionString) => this.ConnectionString = connectionString;
+    public WaiterAvailability(string connectionString) => this.ConnectionString = connectionString;
 
     // Add to Schedule table
     // List of days represented by numbers, 1 to 7
