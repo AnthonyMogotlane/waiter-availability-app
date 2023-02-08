@@ -24,10 +24,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\WaiterAvailabilityApp\WaiterAvailabilityApp.csproj" />
     <Content Include="sql\*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WaiterAvailabilityApp.Common\WaiterAvailabilityApp.csproj" />
   </ItemGroup>
 
 </Project>

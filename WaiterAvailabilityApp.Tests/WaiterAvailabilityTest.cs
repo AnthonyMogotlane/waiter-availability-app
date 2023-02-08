@@ -23,7 +23,7 @@ public class WaiterAvailabilityTest
     {
         using (var connection = new NpgsqlConnection(cs))
         {
-            connection.Execute(File.ReadAllText("../../../../../sql/dropTables.sql"));
+            connection.Execute(File.ReadAllText("../../../../sql/dropTables.sql"));
         }
     }
 
@@ -31,7 +31,7 @@ public class WaiterAvailabilityTest
     {
         using (var connection = new NpgsqlConnection(cs))
         {
-            connection.Execute(File.ReadAllText("../../../../../sql/tables.sql"));
+            connection.Execute(File.ReadAllText("../../../../sql/tables.sql"));
         }
     }
 
@@ -39,10 +39,9 @@ public class WaiterAvailabilityTest
     {
         using (var connection = new NpgsqlConnection(cs))
         {
-            connection.Execute(File.ReadAllText("../../../../../sql/insertWeekdays.sql"));
+            connection.Execute(File.ReadAllText("../../../../sql/insertWeekdays.sql"));
         }
     }
-
 
     [Fact]
     public void ShouldBeAbleToAddWaitersName()
