@@ -3,24 +3,26 @@ using System.Text.Json;
 using Dapper;
 using Npgsql;
 using WaiterAvailabilityApp;
-using WaiterAvailabilityApp.Data;
 using WaiterAvailabilityApp.Model;
-using XUnit;
+using Xunit;
 
 namespace WaiterAvailabilityApp.Tests;
 
 public class WaiterAvailabilityTest
 {
-    string cs = "";
-
+    static string cs = "Host=localhost;Username=postgres;Password=0000;Database=test_db";
+    static string GetConnectionString()
+    {
+        var csEnv = Environment.GetEnvironmentVariable("PSQLConnectionString");
+        if(csEnv == null) csEnv = cs;
+        return csEnv;
+    }
+    
     public void DropTables()
     {
         using (var connection = new NpgsqlConnection(cs))
         {
-            connection.Execute(@"
-                DROP TABLE IF EXISTS schedule;
-                DROP TABLE IF EXISTS waiters;
-                DROP TABLE IF EXISTS weekdays;");
+            connection.Execute(File.ReadAllText("../../../../sql/dropTables.sql"));
         }
     }
 
@@ -28,25 +30,7 @@ public class WaiterAvailabilityTest
     {
         using (var connection = new NpgsqlConnection(cs))
         {
-            var query = System.IO.File.ReadAllText("");
-            connection.Execute(@"
-                CREATE TABLE IF NOT EXISTS weekdays (
-                id serial PRIMARY KEY,
-                day VARCHAR(50) NOT NULL
-            );
-
-            CREATE TABLE IF NOT EXISTS waiters (
-                id serial PRIMARY KEY,
-                firstname VARCHAR(50) NOT NULL
-            );
-
-            CREATE TABLE IF NOT EXISTS schedule (
-                id serial PRIMARY KEY,
-                day_id int NOT NULL,
-                waiter_id int NOT NULL,
-                FOREIGN KEY (day_id) REFERENCES weekdays(id),
-                FOREIGN KEY (waiter_id) REFERENCES waiters(id)
-            );");
+            connection.Execute(File.ReadAllText("../../../../sql/tables.sql"));
         }
     }
 
@@ -54,36 +38,26 @@ public class WaiterAvailabilityTest
     {
         using (var connection = new NpgsqlConnection(cs))
         {
-            connection.Execute(@"
-                INSERT INTO weekdays (day) VALUES 
-                ('Monday'),
-                ('Tuesday'),
-                ('Wednesday'),
-                ('Thursday'),
-                ('Friday'),
-                ('Saturday'),
-                ('Sunday');
-            ");
+            connection.Execute(File.ReadAllText("../../../../sql/insertWeekdays.sql"));
         }
     }
-
 
     [Fact]
     public void ShouldBeAbleToAddWaitersName()
     {
         // Given
-        var applicationDB = new ApplicationDB(cs);
+        var waiterAvailability = new WaiterAvailability(cs);
         DropTables();
         CreateTables();
         PopulateWeekDays();
         using var connection = new NpgsqlConnection(cs);
         connection.Open();
 
-        applicationDB.AddName("Fabiano");
+        waiterAvailability.AddName("Fabiano");
         var expected = connection.Query<Waiter>(@"SELECT * FROM waiters").ToList();
 
         // When 
-        var actual = applicationDB.GetWaiters();
+        var actual = waiterAvailability.GetWaiters();
 
         // Then 
         Assert.Equal(JsonSerializer.Serialize(expected), JsonSerializer.Serialize(actual));
@@ -93,20 +67,20 @@ public class WaiterAvailabilityTest
     public void ShouldBeAbleToReturnTheCountOfWaitersInWaitersTable()
     {
         // Given
-        var applicationDB = new ApplicationDB(cs);
+        var waiterAvailability = new WaiterAvailability(cs);
         DropTables();
         CreateTables();
         PopulateWeekDays();
         using var connection = new NpgsqlConnection(cs);
         connection.Open();
-        
-        applicationDB.AddName("Anthony");
-        applicationDB.AddName("Maboyi");
-        applicationDB.AddName("Skantsotso");
+
+        waiterAvailability.AddName("Anthony");
+        waiterAvailability.AddName("Maboyi");
+        waiterAvailability.AddName("Skantsotso");
 
         var expected = connection.Query<Waiter>(@"SELECT * FROM waiters").ToList().Count;
         // When
-        var actual = applicationDB.GetWaiters().Count;
+        var actual = waiterAvailability.GetWaiters().Count;
         // Then
         Assert.Equal(expected, actual);
     }
@@ -115,22 +89,22 @@ public class WaiterAvailabilityTest
     public void ShouldBeAbleToAddWaiterSelectedDaysToSchedule()
     {
         // Given
-        var applicationDB = new ApplicationDB(cs);
+        var waiterAvailability = new WaiterAvailability(cs);
         DropTables();
         CreateTables();
         PopulateWeekDays();
         using var connection = new NpgsqlConnection(cs);
         connection.Open();
 
-        applicationDB.AddName("Anthony");
-        
-        applicationDB.AddToSchedule("Anthony", new List<int>(){1, 2, 3});
+        waiterAvailability.AddName("Anthony");
+
+        waiterAvailability.AddToSchedule("Anthony", new List<int>() { 1, 2, 3 });
         var expected = connection.Query<Schedule>(@" 
                     SELECT w.firstname, wd.day FROM weekdays wd
                     INNER JOIN schedule s ON wd.id = s.day_id
-                    INNER JOIN waiters w ON w.id = s.waiter_id").ToList(); 
+                    INNER JOIN waiters w ON w.id = s.waiter_id").ToList();
         // When
-        var actual = applicationDB.GetSchedule();
+        var actual = waiterAvailability.GetSchedule();
         // Then
         Assert.Equal(JsonSerializer.Serialize(expected), JsonSerializer.Serialize(actual));
     }
@@ -139,7 +113,7 @@ public class WaiterAvailabilityTest
     public void ShouldBeAbleToReturnTheNumberOfWeekingDays()
     {
         // Given
-        var applicationDB = new ApplicationDB(cs);
+        var waiterAvailability = new WaiterAvailability(cs);
         DropTables();
         CreateTables();
         PopulateWeekDays();
@@ -149,7 +123,7 @@ public class WaiterAvailabilityTest
         var expected = connection.Query<Weekday>(@"SELECT * FROM weekdays").ToList().Count;
 
         // When
-        var actual = applicationDB.GetWeekdays().ToList().Count;
+        var actual = waiterAvailability.GetWeekdays().ToList().Count;
         // Then
         Assert.Equal(expected, actual);
     }
@@ -158,25 +132,25 @@ public class WaiterAvailabilityTest
     public void ShouldBeAbleToGetDaysWaiterSelected()
     {
         // Given
-        var applicationDB = new ApplicationDB(cs);
+        var waiterAvailability = new WaiterAvailability(cs);
         DropTables();
         CreateTables();
         PopulateWeekDays();
         using var connection = new NpgsqlConnection(cs);
         connection.Open();
 
-        applicationDB.AddName("Anthony");
+        waiterAvailability.AddName("Anthony");
 
-        applicationDB.AddToSchedule("Anthony", new List<int>(){1, 2, 3});
-        
+        waiterAvailability.AddToSchedule("Anthony", new List<int>() { 1, 2, 3 });
+
         var expected = connection.Query<Weekday>(@" 
                     SELECT wd.id, wd.day, w.firstname FROM weekdays wd
                     INNER JOIN schedule s ON wd.id = s.day_id
                     INNER JOIN waiters w ON w.id = s.waiter_id
                     WHERE w.firstname = 'Anthony'");
-    
+
         // When
-        var actual = applicationDB.WaiterWorkingDays("Anthony");
+        var actual = waiterAvailability.WaiterWorkingDays("Anthony");
         // Then
         Assert.Equal(JsonSerializer.Serialize(expected), JsonSerializer.Serialize(actual));
     }

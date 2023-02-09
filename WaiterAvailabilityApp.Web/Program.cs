@@ -1,14 +1,11 @@
-//using WaiterAvailabilityApp;
-
 using WaiterAvailabilityApp;
-using WaiterAvailabilityApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddSingleton<IWaiterAvailability, ApplicationDB>(x => 
-    new ApplicationDB(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddSingleton<IWaiterAvailability, WaiterAvailability>(x => 
+    new WaiterAvailability(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

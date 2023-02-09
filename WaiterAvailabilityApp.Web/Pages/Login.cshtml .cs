@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using WaiterAvailabilityAppRazor.Models;
+using WaiterAvailabilityApp.Model;
 
 namespace WaiterAvailabilityApp.Pages;
 
