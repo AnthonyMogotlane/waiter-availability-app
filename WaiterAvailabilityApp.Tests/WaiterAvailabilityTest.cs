@@ -20,7 +20,7 @@ public class WaiterAvailabilityTest
     
     public void DropTables()
     {
-        using (var connection = new NpgsqlConnection(cs))
+        using (var connection = new NpgsqlConnection(GetConnectionString()))
         {
             connection.Execute(File.ReadAllText("../../../../sql/dropTables.sql"));
         }
@@ -28,7 +28,7 @@ public class WaiterAvailabilityTest
 
     public void CreateTables()
     {
-        using (var connection = new NpgsqlConnection(cs))
+        using (var connection = new NpgsqlConnection(GetConnectionString()))
         {
             connection.Execute(File.ReadAllText("../../../../sql/tables.sql"));
         }
@@ -36,7 +36,7 @@ public class WaiterAvailabilityTest
 
     public void PopulateWeekDays()
     {
-        using (var connection = new NpgsqlConnection(cs))
+        using (var connection = new NpgsqlConnection(GetConnectionString()))
         {
             connection.Execute(File.ReadAllText("../../../../sql/insertWeekdays.sql"));
         }
@@ -46,11 +46,11 @@ public class WaiterAvailabilityTest
     public void ShouldBeAbleToAddWaitersName()
     {
         // Given
-        var waiterAvailability = new WaiterAvailability(cs);
+        var waiterAvailability = new WaiterAvailability(GetConnectionString());
         DropTables();
         CreateTables();
         PopulateWeekDays();
-        using var connection = new NpgsqlConnection(cs);
+        using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
         waiterAvailability.AddName("Fabiano");
@@ -67,11 +67,11 @@ public class WaiterAvailabilityTest
     public void ShouldBeAbleToReturnTheCountOfWaitersInWaitersTable()
     {
         // Given
-        var waiterAvailability = new WaiterAvailability(cs);
+        var waiterAvailability = new WaiterAvailability(GetConnectionString());
         DropTables();
         CreateTables();
         PopulateWeekDays();
-        using var connection = new NpgsqlConnection(cs);
+        using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
         waiterAvailability.AddName("Anthony");
@@ -89,11 +89,11 @@ public class WaiterAvailabilityTest
     public void ShouldBeAbleToAddWaiterSelectedDaysToSchedule()
     {
         // Given
-        var waiterAvailability = new WaiterAvailability(cs);
+        var waiterAvailability = new WaiterAvailability(GetConnectionString());
         DropTables();
         CreateTables();
         PopulateWeekDays();
-        using var connection = new NpgsqlConnection(cs);
+        using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
         waiterAvailability.AddName("Anthony");
@@ -113,11 +113,11 @@ public class WaiterAvailabilityTest
     public void ShouldBeAbleToReturnTheNumberOfWeekingDays()
     {
         // Given
-        var waiterAvailability = new WaiterAvailability(cs);
+        var waiterAvailability = new WaiterAvailability(GetConnectionString());
         DropTables();
         CreateTables();
         PopulateWeekDays();
-        using var connection = new NpgsqlConnection(cs);
+        using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
         var expected = connection.Query<Weekday>(@"SELECT * FROM weekdays").ToList().Count;
@@ -132,11 +132,11 @@ public class WaiterAvailabilityTest
     public void ShouldBeAbleToGetDaysWaiterSelected()
     {
         // Given
-        var waiterAvailability = new WaiterAvailability(cs);
+        var waiterAvailability = new WaiterAvailability(GetConnectionString());
         DropTables();
         CreateTables();
         PopulateWeekDays();
-        using var connection = new NpgsqlConnection(cs);
+        using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
         waiterAvailability.AddName("Anthony");
