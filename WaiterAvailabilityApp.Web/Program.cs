@@ -7,8 +7,13 @@ builder.Services.AddRazorPages();
 builder.Services.AddSingleton<IWaiterAvailability, WaiterAvailability>(x => 
     new WaiterAvailability(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-var app = builder.Build();
+// Configure a session
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(opt => {
+    opt.IdleTimeout = TimeSpan.FromSeconds(30);
+});
 
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -24,6 +29,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+// Enable a session
+app.UseSession();
 
 app.MapRazorPages();
 
