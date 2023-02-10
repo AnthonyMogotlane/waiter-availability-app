@@ -9,4 +9,5 @@ public interface IWaiterAvailability
     void ResertDays(string name);
     List<Weekday> GetWeekdays();
     List<Weekday> WaiterWorkingDays(string name);
+    bool CheckWaiter(string name);
 }

@@ -99,4 +99,14 @@ public class WaiterAvailability : IWaiterAvailability
                     WHERE w.firstname = @FirstName", new { FirstName = name}).ToList();
         }
     }
+
+    public bool CheckWaiter(string name)
+    {
+        using(var connection = new NpgsqlConnection(ConnectionString))
+        {
+            return connection.Query<Waiter>(@"SELECT * FROM waiters
+                WHERE firstname = @FirstName", new {FirstName = name}).ToList().Count > 0 ? true : false;
+            
+        }
+    }
 }
