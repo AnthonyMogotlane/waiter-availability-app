@@ -9,11 +9,10 @@ public class AdminModel : PageModel
     private readonly ILogger<AdminModel> _logger;
     private readonly IWaiterAvailability _waiter;
 
-    [BindProperty(SupportsGet = true)]
-    public Waiter Waiter { get; set; }
-
     [BindProperty]
-    public string WaiterFirstName {get;set;}
+    public string WaiterFirstName { get; set; }
+
+    public string? WaiterAccountName { get; set; }
 
 
     [BindProperty]
@@ -50,48 +49,49 @@ public class AdminModel : PageModel
 
     public void OnGet()
     {
-        WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
+        // Get WaiterAccountName session value
+        WaiterAccountName = HttpContext.Session.GetString("_WaiterAccountName");
+
+        WaiterWorkingDays = _waiter.WaiterWorkingDays(WaiterAccountName!).Select(x => x.Day)!;
         GetWeekDayStatus();
     }
 
     public IActionResult OnPost()
     {
-        if(Waiter.FirstName == null) 
+        // Get WaiterAccountName session value
+        WaiterAccountName = HttpContext.Session.GetString("_WaiterAccountName");
+
+        if (WaiterAccountName == null)
         {
-            WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
+            WaiterWorkingDays = _waiter.WaiterWorkingDays(WaiterAccountName!).Select(x => x.Day)!;
             GetWeekDayStatus();
             TempData["login"] = "login";
             return Page();
-        } 
-        else if(SelectedDays.Count > 0 && SelectedDays.Count <= 5)
+        }
+        else if (SelectedDays.Count > 0 && SelectedDays.Count <= 5)
         {
-            _waiter.ResertDays(Waiter.FirstName!);
-            _waiter.AddToSchedule(Waiter.FirstName!, SelectedDays);
-            WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
+            _waiter.ResertDays(WaiterAccountName!);
+            _waiter.AddToSchedule(WaiterAccountName!, SelectedDays);
+            WaiterWorkingDays = _waiter.WaiterWorkingDays(WaiterAccountName!).Select(x => x.Day)!;
             GetWeekDayStatus();
             TempData["submit"] = "Days submitted successfully";
             return Page();
         }
         else
         {
-            WaiterWorkingDays = _waiter.WaiterWorkingDays(Waiter.FirstName!).Select(x => x.Day)!;
+            WaiterWorkingDays = _waiter.WaiterWorkingDays(WaiterAccountName!).Select(x => x.Day)!;
             GetWeekDayStatus();
             TempData["message"] = "Minimum days to work is 1, Maximum days to work is 5";
-            return Page();  
+            return Page();
         }
     }
 
     public IActionResult OnPostReset()
     {
-        _waiter.ResertDays(WaiterFirstName);    
+        _waiter.ResertDays(WaiterFirstName);
         WaiterWorkingDays = _waiter.WaiterWorkingDays(WaiterFirstName).Select(x => x.Day)!;
         TempData["reset"] = "Days reseted successfully";
 
-        return Redirect($"/Admin/?FirstName={WaiterFirstName}");
-    }
-
-    public IActionResult OnPostAdmin()
-    {
-        return Redirect("/Schedule/?FirstName=Admin");
+        return Redirect($"/Admin/");
     }
 }

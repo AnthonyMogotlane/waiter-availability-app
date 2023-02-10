@@ -4,44 +4,15 @@
     ViewData["Title"] = "Schedule page";
 }
 
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav w-100 justify-content-between">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark">Admin</a>
-                    </li>
-
-                    <li class="nav-item">
-                        @if (Model.Waiter.FirstName != null)
-                        {
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Logout</a>
-                        }
-                        else
-                        {
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
-                        }
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-
 @if (TempData["login"] != null)
 {
     <div class="modal-container d-flex justify-content-center align-items-center login-row">
-        <div class="card text-dark p-4">
-            You need to "login" as an Admin
-            <a class="btn btn-primary" asp-page="/Login">login</a>
-            <a asp-page="/Index">Home</a>
-        </div>
+    <div class="card text-dark p-4">
+        You need to "login" as an Admin
+        <a class="btn btn-primary" asp-page="/Login">login</a>
+        <a asp-page="/Index">Home</a>
     </div>
+</div>
 }
 
 <div class="row d-flex justify-content-center">

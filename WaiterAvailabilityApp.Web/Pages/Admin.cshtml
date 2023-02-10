@@ -4,49 +4,12 @@
     ViewData["Title"] = "Home page";
 }
 
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav w-100 justify-content-between">
-                    <div class="d-flex">
-                        <li class="nav-item">
-                            @if (Model.Waiter.FirstName != null)
-                            {
-                                <a class="nav-link text-dark bg-light rounded">Admin</a>
-                            }
-                        </li>
-                        <li>
-                            <form method="post" asp-page-handler="Admin">
-                                <button class="nav-link btn-waiter text-dark">Schedule</button>
-                            </form>
-                        </li>
-                    </div>
-                    <li class="">
-                        @if (Model.Waiter.FirstName != null)
-                        {
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Logout</a>
-                        }
-                        else
-                        {
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
-                        }
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
-
 <div class="row">
 </div>
 <div class="row d-flex justify-content-center">
     <div class="col-12 col-md-4">
-        <h3>@Model.Waiter.FirstName</h3>
+        <h3>@Model.WaiterAccountName's account</h3>
+
         @if (TempData["login"] != null)
         {
             <div class="modal-container d-flex justify-content-center align-items-center">
@@ -85,7 +48,7 @@
 
         <form method="post">
 
-            <input type="hidden" name="WaiterFirstName" value="@Model.Waiter.FirstName">
+            <input type="hidden" name="WaiterFirstName" value="@Model.WaiterAccountName">
 
             <table class="table table-borderless bg-light rounded">
                 <thead>

@@ -10,9 +10,7 @@ public class ScheduleModel : PageModel
 {
     private readonly ILogger<ScheduleModel> _logger;
     private IWaiterAvailability _waiter;
-
-    [BindProperty(SupportsGet = true)]
-    public Waiter Waiter { get; set; }
+    public string? FirstName { get; set; }
     public ScheduleModel(ILogger<ScheduleModel> logger, IWaiterAvailability waiter)
     {
         _logger = logger;
@@ -34,14 +32,16 @@ public class ScheduleModel : PageModel
     public IEnumerable<IGrouping<string?, Schedule>> Schedule { get; set; }
 
     public void OnGet()
-    {  
-        if(Waiter.FirstName != null)
+    {
+        FirstName = HttpContext.Session.GetString("_FirstName");
+
+        if (FirstName != null)
         {
             Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
         }
         else
         {
-            TempData["login"] = "login";
+            TempData["login"] = "Please login first to see the schedule";
             Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
         }
     }
@@ -56,6 +56,7 @@ public class ScheduleModel : PageModel
 
     public IActionResult OnPostAccount(string name)
     {
-        return Redirect($"/Admin/?FirstName={name}");
+        HttpContext.Session.SetString("_WaiterAccountName", name);
+        return Redirect($"/Admin/");
     }
 }
