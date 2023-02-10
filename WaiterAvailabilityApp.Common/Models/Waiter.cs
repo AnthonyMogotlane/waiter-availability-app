@@ -5,6 +5,6 @@ public class Waiter
 {
     [Key]
     public int Id { get; set; }
-    [Required]
+    [Required(ErrorMessage = "Login name is required!")]
     public string? FirstName { get; set; }
 }
