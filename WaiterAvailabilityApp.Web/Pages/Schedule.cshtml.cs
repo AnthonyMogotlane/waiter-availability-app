@@ -48,15 +48,28 @@ public class ScheduleModel : PageModel
 
     public IActionResult OnPostClear()
     {
-        _waiter.ClearSchedule(); // Clear from the database
-        Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
-        TempData["success"] = "Schedule cleared successfully";
-        return Page();
+        if (HttpContext.Session.GetString("_FirstName") != null)
+        {
+            _waiter.ClearSchedule(); // Clear from the database
+            Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
+            TempData["success"] = "Schedule cleared successfully";
+            return Page();
+        }
+        else
+        {
+            Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
+            TempData["login"] = "Please login first to see the schedule";
+            return Page();
+        }
     }
 
     public IActionResult OnPostAccount(string name)
     {
-        HttpContext.Session.SetString("_WaiterAccountName", name);
-        return Redirect($"/Admin/");
+        if (HttpContext.Session.GetString("_FirstName") != null)
+        {
+            HttpContext.Session.SetString("_WaiterAccountName", name);
+            return Redirect($"/Admin/");
+        }
+        return Page();
     }
 }

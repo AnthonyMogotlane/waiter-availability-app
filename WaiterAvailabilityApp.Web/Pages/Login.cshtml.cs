@@ -16,6 +16,8 @@ public class LoginModel : PageModel
 
     [BindProperty]
     public Waiter Waiter { get; set; }
+    [BindProperty]
+    public Waiter Password { get; set; }
     public string? FirstName { get; set; }
 
     public void OnGet()
@@ -25,32 +27,26 @@ public class LoginModel : PageModel
 
     public IActionResult OnPost()
     {
-        System.Console.WriteLine(FirstName);
-
-        if (ModelState.IsValid)
+        if (Waiter.FirstName! == "Admin")
         {
-
-            ModelState.Clear();
-            if (Waiter.FirstName! == "Admin")
+            // Set session value
+            HttpContext.Session.SetString("_FirstName", Waiter.FirstName!);
+            return Redirect($"/Schedule");
+        }
+        else
+        {
+            // Check if name is registered
+            if (_waiter.CheckValidUser(Waiter.FirstName!, Waiter.Password!))
             {
                 // Set session value
                 HttpContext.Session.SetString("_FirstName", Waiter.FirstName!);
-                return Redirect($"/Schedule");
+                return Redirect($"/Waiter");
             }
             else
             {
-                // Check if name is registered
-                if (_waiter.CheckWaiter(Waiter.FirstName!))
-                {
-                    // Set session value
-                    HttpContext.Session.SetString("_FirstName", Waiter.FirstName!);
-                    return Redirect($"/Waiter");
-                }
-                else
-                {
-                    Waiter.FirstName = "";
-                    TempData["invalidName"] = "You have Enter invalid login name";
-                }
+                System.Console.WriteLine("test");
+                TempData["invalidName"] = "You have entered invalid login name or password";
+                Waiter.FirstName = "";
             }
         }
         return Page();
