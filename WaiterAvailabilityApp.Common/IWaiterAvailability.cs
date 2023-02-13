@@ -10,4 +10,5 @@ public interface IWaiterAvailability
     List<Weekday> GetWeekdays();
     List<Weekday> WaiterWorkingDays(string name);
     bool CheckWaiter(string name);
+    bool CheckValidUser(string name, string password);
 }

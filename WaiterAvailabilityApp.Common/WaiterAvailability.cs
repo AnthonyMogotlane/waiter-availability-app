@@ -109,4 +109,14 @@ public class WaiterAvailability : IWaiterAvailability
             
         }
     }
+
+    public bool CheckValidUser(string name, string password)
+    {
+         using(var connection = new NpgsqlConnection(ConnectionString))
+        {
+            return connection.Query<Waiter>(@"SELECT * FROM waiters
+                WHERE firstname = @FirstName and password = @Password" , new {FirstName = name, Password = password}).ToList().Count > 0 ? true : false;
+            
+        }
+    }
 }
