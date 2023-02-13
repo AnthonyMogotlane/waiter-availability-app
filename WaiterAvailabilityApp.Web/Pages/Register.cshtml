@@ -1,0 +1,46 @@
+﻿@page
+@model WaiterAvailabilityApp.Pages.RegisterModel
+@{
+    ViewData["Title"] = "Register Page";
+}
+
+
+@if (TempData["nameUnavailable"] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.error('@TempData["nameUnavailable"]');
+    </script>
+}
+
+<div class="row d-flex justify-content-center align-items-center login-row">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-4">
+        <h1 class="display-6 text-center mb-4 status-th">Waiter Availability App</h1>
+        <div class="card p-5 pb-2 text-dark">
+            <form class="form-group" method="post">
+                <span asp-validation-for="Waiter.FirstName" class="text-danger"></span>
+                <input class="form-control" asp-for="Waiter.FirstName" placeholder="Enter your name">
+                <input type="submit" class="btn btn-primary my-4 w-100" value="Register">
+            </form>
+            <p>Have an account? <a asp-page="/Login" class="text-success">Login</a></p>
+            <a class="nav-link text-primary" asp-page="/Index"><i class="bi bi-arrow-left"></i> Home</a>
+        </div>
+    </div>
+</div>
+
+@if (TempData["registration"] != null)
+{
+    <div class="modal-container d-flex justify-content-center align-items-center login-row z-index text-center">
+        <div class="card text-dark p-4 modal-pop">
+            <h1 class="status-th display-6">@TempData["registration"]</h1>
+            <p><i class="bi bi-check-circle-fill text-success display-4"></i></p>
+            <p>Thank you for registering</p>
+            <p>You may now <span><a class="text-success" asp-page="/Login">Login</a></span></p>
+            <a class="nav-link text-primary" asp-page="/">Home</a>
+        </div>
+    </div>
+}
+
+
+
