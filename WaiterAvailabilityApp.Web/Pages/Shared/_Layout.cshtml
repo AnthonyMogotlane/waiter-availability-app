@@ -34,15 +34,17 @@
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav w-100 justify-content-between">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark bg-light rounded">@firstName</a>
-                            </li>
-                            @if (firstName == "Admin")
-                            {
+                            <div class="d-flex">
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-page="/Schedule">Schedule</a>
+                                    <a class="nav-link text-dark bg-light rounded">@firstName</a>
                                 </li>
-                            }
+                                @if (firstName == "Admin")
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-page="/Schedule">Schedule</a>
+                                    </li>
+                                }
+                            </div>
                             <li class="nav-item">
                                 @if (firstName != null)
                                 {
