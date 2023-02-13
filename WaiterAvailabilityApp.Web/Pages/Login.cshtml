@@ -21,9 +21,13 @@
             <form class="form-group" method="post">
                 <span asp-validation-for="Waiter.FirstName" class="text-danger"></span>
                 <input class="form-control" asp-for="Waiter.FirstName" placeholder="Enter your login name">
+                <span asp-validation-for="Waiter.Password" class="text-danger"></span>
+                <input type="password" class="form-control mt-2" asp-for="Waiter.Password" placeholder="Enter your password">
                 <input type="submit" class="btn btn-success my-4 w-100" value="login">
             </form>
-            <p class="text-dark">Dont have an account? <a asp-page="/Index" class="text-success">Register</a></p>
+            <p class="text-dark">Dont have an account? <a asp-page="/Register" class="text-primary">Register</a></p>
+            <a class="nav-link text-primary" asp-page="/Index"><i class="bi bi-arrow-left"></i> Home</a>
+
         </div>
     </div>
 </div>

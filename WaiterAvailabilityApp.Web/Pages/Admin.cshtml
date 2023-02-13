@@ -4,22 +4,21 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="row">
-</div>
-<div class="row d-flex justify-content-center">
+@if (TempData["login"] != null)
+{
+    <div class="modal-container d-flex justify-content-center align-items-center login-row">
+        <div class="card text-dark p-4 modal-pop">
+            <p>You need to login as an admin to modify days</p>
+            <a class="btn btn-success" asp-page="/Login">login</a>
+            <a class="nav-link text-primary mt-3" asp-page="/Index"><i class="bi bi-arrow-left"></i>Home</a>
+        </div>
+    </div>
+}
+
+<div class="row d-flex justify-content-center p-5">
     <div class="col-12 col-md-4">
         <h3>@Model.WaiterAccountName's account</h3>
 
-        @if (TempData["login"] != null)
-        {
-            <div class="modal-container d-flex justify-content-center align-items-center">
-                <div class="card text-dark p-4">
-                    You need to "login" to select days
-                    <a class="btn btn-primary" asp-page="/Login">login</a>
-                    <a asp-page="/">Home</a>
-                </div>
-            </div>
-        }
 
         @if (TempData["submit"] != null)
         {
