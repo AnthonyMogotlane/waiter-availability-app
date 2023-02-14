@@ -49,11 +49,11 @@ public class WaiterAvailability : IWaiterAvailability
         }
     }
 
-    public void AddName(string name)
+    public void AddName(string name, string password)
     {
         using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
         {
-            connection.Execute(@"INSERT INTO waiters (firstname) VALUES (@FirstName)", new { FirstName = name });
+            connection.Execute(@"INSERT INTO waiters (firstname, password) VALUES (@FirstName, @Password)", new { FirstName = name, Password = password});
         }
     }
 
@@ -100,7 +100,7 @@ public class WaiterAvailability : IWaiterAvailability
         }
     }
 
-    public bool CheckWaiter(string name)
+    public bool CheckUsername(string name)
     {
         using(var connection = new NpgsqlConnection(ConnectionString))
         {
