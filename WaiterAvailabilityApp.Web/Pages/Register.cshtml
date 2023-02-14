@@ -4,7 +4,6 @@
     ViewData["Title"] = "Register Page";
 }
 
-
 @if (TempData["nameUnavailable"] != null)
 {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -20,7 +19,9 @@
         <div class="card p-5 pb-2 text-dark">
             <form class="form-group" method="post">
                 <span asp-validation-for="Waiter.FirstName" class="text-danger"></span>
-                <input class="form-control" asp-for="Waiter.FirstName" placeholder="Enter your name">
+                <input class="form-control" asp-for="Waiter.FirstName" placeholder="Name">
+                <span asp-validation-for="Waiter.Password" class="text-danger"></span>
+                <input type="password" class="form-control mt-2" asp-for="Waiter.Password" placeholder="Password">
                 <input type="submit" class="btn btn-primary my-4 w-100" value="Register">
             </form>
             <p>Have an account? <a asp-page="/Login" class="text-success">Login</a></p>

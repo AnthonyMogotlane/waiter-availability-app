@@ -20,9 +20,11 @@ namespace WaiterAvailabilityApp.Pages
         {
             if(ModelState.IsValid)
             {
-                if(!_waiter.CheckWaiter(Waiter.FirstName!))
+            System.Console.WriteLine(Waiter.FirstName);
+            System.Console.WriteLine(Waiter.Password);
+                if(!_waiter.CheckUsername(Waiter.FirstName!))
                 {
-                    _waiter.AddName(Waiter.FirstName!);
+                    _waiter.AddName(Waiter.FirstName!, Waiter.Password!);
                     TempData["registration"] = "Registration Successful";
                 }
                 else
