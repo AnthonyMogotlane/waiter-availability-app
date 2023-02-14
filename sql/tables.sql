@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS weekdays(
 
 CREATE TABLE IF NOT EXISTS waiters (
     id serial PRIMARY KEY,
-    firstname VARCHAR(50) NOT NULL
+    firstname VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS schedule (
