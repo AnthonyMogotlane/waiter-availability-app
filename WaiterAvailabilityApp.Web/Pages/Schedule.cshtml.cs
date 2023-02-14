@@ -57,7 +57,6 @@ public class ScheduleModel : PageModel
         }
         else
         {
-            Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
             TempData["login"] = "Please login first to see the schedule";
             return Page();
         }
