@@ -53,7 +53,7 @@ public class WaiterAvailabilityTest
         using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
-        waiterAvailability.AddName("Fabiano");
+        waiterAvailability.AddName("Fabiano", "fabiano123");
         var expected = connection.Query<Waiter>(@"SELECT * FROM waiters").ToList();
 
         // When 
@@ -74,9 +74,9 @@ public class WaiterAvailabilityTest
         using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
-        waiterAvailability.AddName("Anthony");
-        waiterAvailability.AddName("Maboyi");
-        waiterAvailability.AddName("Skantsotso");
+        waiterAvailability.AddName("Anthony", "anthony123");
+        waiterAvailability.AddName("Maboyi", "maboyi123");
+        waiterAvailability.AddName("Skantsotso", "skantsotso123");
 
         var expected = connection.Query<Waiter>(@"SELECT * FROM waiters").ToList().Count;
         // When
@@ -96,7 +96,7 @@ public class WaiterAvailabilityTest
         using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
-        waiterAvailability.AddName("Anthony");
+        waiterAvailability.AddName("Anthony", "anthony123");
 
         waiterAvailability.AddToSchedule("Anthony", new List<int>() { 1, 2, 3 });
         var expected = connection.Query<Schedule>(@" 
@@ -139,7 +139,7 @@ public class WaiterAvailabilityTest
         using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
-        waiterAvailability.AddName("Anthony");
+        waiterAvailability.AddName("Anthony", "anthony123");
 
         waiterAvailability.AddToSchedule("Anthony", new List<int>() { 1, 2, 3 });
 
