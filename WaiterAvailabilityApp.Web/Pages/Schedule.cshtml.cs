@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using WaiterAvailabilityApp;
 using WaiterAvailabilityApp.Model;
 
-
 namespace WaiterAvailabilityApp.Pages;
-
 public class ScheduleModel : PageModel
 {
     private readonly ILogger<ScheduleModel> _logger;
@@ -16,6 +14,9 @@ public class ScheduleModel : PageModel
         _logger = logger;
         _waiter = waiter;
     }
+
+    [TempData]
+    public string View { get; set; }
 
     public List<string> weekdays = new List<string>()
     {
@@ -69,6 +70,19 @@ public class ScheduleModel : PageModel
             HttpContext.Session.SetString("_WaiterAccountName", name);
             return Redirect($"/Admin/");
         }
+        return Page();
+    }
+
+    public IActionResult OnPostTable()
+    {
+        Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
+        View = "Table";
+        return Page();
+    }
+    public IActionResult OnPostBoard()
+    {
+        Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
+        View = "Board";
         return Page();
     }
 }
