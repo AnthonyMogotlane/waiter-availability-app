@@ -27,7 +27,7 @@ public class LoginModel : PageModel
 
     public IActionResult OnPost()
     {
-        if (Waiter.FirstName! == "Admin")
+        if (_waiter.CheckValidUser("Admin", Waiter.Password!))
         {
             // Set session value
             HttpContext.Session.SetString("_FirstName", Waiter.FirstName!);
