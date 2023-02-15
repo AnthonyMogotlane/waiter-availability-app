@@ -7,7 +7,15 @@ public class WaiterAvailability : IWaiterAvailability
 {
     private string? ConnectionString { get; set; }
 
-    public WaiterAvailability(string connectionString) => this.ConnectionString = connectionString;
+    public WaiterAvailability(string connectionString)
+    {
+        this.ConnectionString = connectionString;
+
+        using (var connection = new NpgsqlConnection(connectionString))
+        {
+            connection.Execute(File.ReadAllText("../sql/tables.sql"));
+        }
+    }
 
     // Add to Schedule table
     // List of days represented by numbers, 1 to 7
