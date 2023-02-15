@@ -1,7 +1,17 @@
 CREATE TABLE IF NOT EXISTS weekdays(
     id serial PRIMARY KEY,
-    day VARCHAR(50) NOT NULL
+    day VARCHAR(50) NOT NULL UNIQUE
 );
+
+-- Populating weekdays
+INSERT INTO weekdays (day) VALUES 
+    ('Monday'),
+    ('Tuesday'),
+    ('Wednesday'),
+    ('Thursday'),
+    ('Friday'),
+    ('Saturday'),
+    ('Sunday');
 
 CREATE TABLE IF NOT EXISTS waiters (
     id serial PRIMARY KEY,
