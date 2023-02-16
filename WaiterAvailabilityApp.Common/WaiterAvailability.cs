@@ -7,7 +7,15 @@ public class WaiterAvailability : IWaiterAvailability
 {
     private string? ConnectionString { get; set; }
 
-    public WaiterAvailability(string connectionString) => this.ConnectionString = connectionString;
+    public WaiterAvailability(string connectionString)
+    {
+        this.ConnectionString = connectionString;
+
+        using (var connection = new NpgsqlConnection(connectionString))
+        {
+            connection.Execute(File.ReadAllText("../sql/tables.sql"));
+        }
+    }
 
     // Add to Schedule table
     // List of days represented by numbers, 1 to 7
@@ -49,11 +57,11 @@ public class WaiterAvailability : IWaiterAvailability
         }
     }
 
-    public void AddName(string name)
+    public void AddName(string name, string password)
     {
         using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
         {
-            connection.Execute(@"INSERT INTO waiters (firstname) VALUES (@FirstName)", new { FirstName = name });
+            connection.Execute(@"INSERT INTO waiters (firstname, password) VALUES (@FirstName, @Password)", new { FirstName = name, Password = password});
         }
     }
 
@@ -97,6 +105,26 @@ public class WaiterAvailability : IWaiterAvailability
                     INNER JOIN schedule s ON wd.id = s.day_id
                     INNER JOIN waiters w ON w.id = s.waiter_id
                     WHERE w.firstname = @FirstName", new { FirstName = name}).ToList();
+        }
+    }
+
+    public bool CheckUsername(string name)
+    {
+        using(var connection = new NpgsqlConnection(ConnectionString))
+        {
+            return connection.Query<Waiter>(@"SELECT * FROM waiters
+                WHERE firstname = @FirstName", new {FirstName = name}).ToList().Count > 0 ? true : false;
+            
+        }
+    }
+
+    public bool CheckValidUser(string name, string password)
+    {
+         using(var connection = new NpgsqlConnection(ConnectionString))
+        {
+            return connection.Query<Waiter>(@"SELECT * FROM waiters
+                WHERE firstname = @FirstName and password = @Password" , new {FirstName = name, Password = password}).ToList().Count > 0 ? true : false;
+            
         }
     }
 }

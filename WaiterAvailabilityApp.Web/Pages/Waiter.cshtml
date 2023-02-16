@@ -1,24 +1,26 @@
 ﻿@page
-@model AdminModel
+@model WaiterModel
 @{
     ViewData["Title"] = "Home page";
 }
 
-@if (TempData["login"] != null)
-{
-    <div class="modal-container d-flex justify-content-center align-items-center login-row">
-        <div class="card text-dark p-4 modal-pop">
-            <p>You need to login as an admin to modify days</p>
-            <a class="btn btn-success" asp-page="/Login">login</a>
-            <a class="nav-link text-primary mt-3" asp-page="/Index"><i class="bi bi-arrow-left"></i>Home</a>
-        </div>
-    </div>
-}
-
-<div class="row d-flex justify-content-center p-5">
+<div class="row">
+</div>
+<div class="row d-flex justify-content-center">
     <div class="col-12 col-md-4">
-        <h3>@Model.WaiterAccountName's account</h3>
+        <h3>Hi @Model.FirstName</h3>
+        <p>Select your working days</p>
 
+        @if (TempData["login"] != null || Model.FirstName == null)
+        {
+            <div class="modal-container d-flex justify-content-center align-items-center login-row">
+                <div class="card text-dark p-4 modal-pop">
+                    <p>You need to login to select days</p>
+                    <a class="btn btn-success" asp-page="/Login">login</a>
+                    <a class="nav-link text-primary mt-3" asp-page="/Index"><i class="bi bi-arrow-left"></i> Home</a>
+                </div>
+            </div>
+        }
 
         @if (TempData["submit"] != null)
         {
@@ -47,7 +49,7 @@
 
         <form method="post">
 
-            <input type="hidden" name="WaiterFirstName" value="@Model.WaiterAccountName">
+            <input type="hidden" name="WaiterFirstName" value="@Model.FirstName">
 
             <table class="table table-borderless bg-light rounded">
                 <thead>

@@ -1,22 +1,36 @@
 ﻿@page
 @model LoginModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Login page";
+}
+
+
+@if (TempData["invalidName"] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.error('@TempData["invalidName"]');
+    </script>
 }
 
 <div class="row d-flex justify-content-center align-items-center login-row">
-    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+    <div class="col-12 col-md-8 col-lg-6 col-xl-4">
+        <h1 class="display-6 text-center mb-4 status-th">Waiter Availability App</h1>
         <div class="card p-5 pb-2">
-            <h1 class="display-6 text-center text-dark mb-4 status-th">Waiter's App</h1>
             <form class="form-group" method="post">
-                <span asp-validation-for="waiter.FirstName" class="text-danger"></span>
-                <input type="text" class="form-control" asp-for="waiter.FirstName" placeholder="Enter your login name">
-                <input type="submit" class="btn btn-success my-4" value="login">
+                <span asp-validation-for="Waiter.FirstName" class="text-danger"></span>
+                <input class="form-control" asp-for="Waiter.FirstName" placeholder="Enter your login name">
+                <span asp-validation-for="Waiter.Password" class="text-danger"></span>
+                <input type="password" class="form-control mt-2" asp-for="Waiter.Password" placeholder="Enter your password">
+                <input type="submit" class="btn btn-success my-4 w-100" value="login">
             </form>
+            <p class="text-dark">Dont have an account? <a asp-page="/Register" class="text-primary">Register</a></p>
+            <a class="nav-link text-primary" asp-page="/Index"><i class="bi bi-arrow-left"></i> Home</a>
+
         </div>
     </div>
 </div>
-
 
 @section scripts{
     <partial name="_ValidationScriptsPartial" />

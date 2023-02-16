@@ -8,17 +8,17 @@ INSERT INTO weekdays (day) VALUES
     ('Saturday'),
     ('Sunday');
 
-INSERT INTO waiters (firstname) VALUES
-    ('Anthony'),
-    ('John'),
-    ('Phumza'),
-    ('Lebalang'),
-    ('Lerato'),
-    ('Phumza'),
-    ('Kgotso'),
-    ('Zozo'),
-    ('Shaun'),
-    ('Sofi');
+INSERT INTO waiters (firstname, password) VALUES
+    ('Anthony', 'anthony123'),
+    ('John', 'john123'),
+    ('Phumza', 'phumza123'),
+    ('Lebalang', 'labalang123'),
+    ('Lerato', 'lerato123'),
+    ('Kgotso', 'kgotso123'),
+    ('Zozo', 'zozo123'),
+    ('Shaun', 'shaun123'),
+    ('Sofi', 'sofi123');
+    ('Dima', 'dima123');
 
 INSERT INTO schedule (day_id, waiter_id) VALUES
     (1, 1),
