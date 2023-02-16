@@ -3,7 +3,7 @@
 
 Waiter-Availability-App is an application to help restaurant managers to schedule weekly waiters shifts, it allows waiters to select days they can work on and update days they can work on. The manager can see how many waiters are available to work on and reset the schedule for a new week.
 
-![](https://anthonymogotlane.github.io/logic-gates/waiters-app/screen-two.png)
+<img width="209" src="https://anthonymogotlane.github.io/logic-gates/waiters-app/screen-two.png" />
 
 ## Technologies
 Project is created with: 
