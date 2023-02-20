@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WaiterAvailabilityApp.Model;
+using WaiterAvailabilityApp.Lib;
 
 namespace WaiterAvailabilityApp.Pages;
 
@@ -16,22 +17,16 @@ public class WaiterModel : PageModel
 
 
     [BindProperty]
-    public List<int> SelectedDays { get; set; } // To hold selected days by the waiter
+    public List<string> SelectedDays { get; set; } // To hold selected days by the waiter
     public IEnumerable<string> WaiterWorkingDays { get; set; }
+    public IEnumerable<string> WaiterWorkingDates { get; set; }
     public IEnumerable<IGrouping<string?, Schedule>> Schedule { get; set; }
     public Dictionary<string, int> WeekDayStatus { get; set; }
+    public int Start { get; set; }
+    public int End { get; set; }
 
+    public Dictionary<DateOnly, DayOfWeek> weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, 0, 7);
 
-    public Dictionary<int, string> weekdays = new Dictionary<int, string>()
-    {
-        {1, "Monday"},
-        {2, "Tuesday"},
-        {3, "Wednesday"},
-        {4, "Thursday"},
-        {5, "Friday"},
-        {6, "Saturday"},
-        {7, "Sunday"}
-    };
 
     public WaiterModel(ILogger<WaiterModel> logger, IWaiterAvailability waiter)
     {
@@ -42,17 +37,19 @@ public class WaiterModel : PageModel
     // Get how many waiters have booked for that day
     public void GetWeekDayStatus()
     {
-        Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
+        Schedule = _waiter.GetSchedule().GroupBy(x => x.Dates);
         WeekDayStatus = new Dictionary<string, int>();
         foreach (var group in Schedule) WeekDayStatus.Add(group.Key!, group.Count());
     }
+    public void GetWaitrsWorkingDates() => 
+        WaiterWorkingDates = _waiter.WaiterWorkingDates(FirstName!).Select(x => x.Dates)!;
 
     public void OnGet()
     {
         // Get session value
         FirstName = HttpContext.Session.GetString("_FirstName");
 
-        WaiterWorkingDays = _waiter.WaiterWorkingDays(FirstName!).Select(x => x.Day)!;
+        GetWaitrsWorkingDates();
         GetWeekDayStatus();
     }
 
@@ -63,7 +60,7 @@ public class WaiterModel : PageModel
 
         if (FirstName == null)
         {
-            WaiterWorkingDays = _waiter.WaiterWorkingDays(FirstName!).Select(x => x.Day)!;
+            GetWaitrsWorkingDates();
             GetWeekDayStatus();
             TempData["login"] = "login";
             return Page();
@@ -71,15 +68,15 @@ public class WaiterModel : PageModel
         else if (SelectedDays.Count > 0 && SelectedDays.Count <= 5)
         {
             _waiter.ResertDays(FirstName!);
-            _waiter.AddToSchedule(FirstName!, SelectedDays);
-            WaiterWorkingDays = _waiter.WaiterWorkingDays(FirstName!).Select(x => x.Day)!;
+            _waiter.AddToScheduleWithDates(FirstName!, SelectedDays);
+            GetWaitrsWorkingDates();
             GetWeekDayStatus();
             TempData["submit"] = "Days submitted successfully";
             return Page();
         }
         else
         {
-            WaiterWorkingDays = _waiter.WaiterWorkingDays(FirstName!).Select(x => x.Day)!;
+            GetWaitrsWorkingDates();
             GetWeekDayStatus();
             TempData["message"] = "Minimum days to work is 1, Maximum days to work is 5";
             return Page();
@@ -89,9 +86,23 @@ public class WaiterModel : PageModel
     public IActionResult OnPostReset()
     {
         _waiter.ResertDays(WaiterFirstName);
-        WaiterWorkingDays = _waiter.WaiterWorkingDays(WaiterFirstName).Select(x => x.Day)!;
+        GetWaitrsWorkingDates();
         TempData["reset"] = "Days reseted successfully";
 
+        return Redirect($"/Waiter");
+    }
+
+    public IActionResult OnPostNext()
+    {
+        Start = 7;
+        End = 14;
+        
+        HttpContext.Session.SetString("_FirstName", WaiterFirstName);
+        System.Console.WriteLine(HttpContext.Session.GetString("_FirstName"));
+        weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, 7, 14);
+        GetWeekDayStatus();
+        GetWaitrsWorkingDates();
+       
         return Redirect($"/Waiter");
     }
 }
