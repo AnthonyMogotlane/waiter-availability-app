@@ -50,7 +50,7 @@
         <form method="post">
 
             <input type="hidden" name="WaiterFirstName" value="@Model.FirstName">
-
+            <button asp-page-handler="next">Next</button>
             <table class="table table-borderless bg-light rounded">
                 <thead>
                     <tr>
@@ -63,14 +63,15 @@
                 <tbody>
                     @foreach (var day in Model.weekdays)
                     {
+
                         <tr class="name-color border-top">
-                            @if (Model.WaiterWorkingDays.Contains(day.Value))
+                            @if (Model.WaiterWorkingDates.Contains(day.Key.ToString()))
                             {
                                 <td>
                                     <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key" checked>
                                 </td>
                             }
-                            else if (Model.WeekDayStatus.ContainsKey(day.Value) && Model.WeekDayStatus[day.Value] >= 3)
+                            else if (Model.WeekDayStatus.ContainsKey(day.Key.ToString()) && Model.WeekDayStatus[day.Key.ToString()] >= 3)
                             {
                                 <td>
                                     <input id="@day" type="checkbox" name="SelectedDays" value="@day.Key" disabled>
@@ -84,10 +85,11 @@
                             }
 
                             <td>
-                                <label>@day.Value</label>
+                                <li class="bold">@day.Value.ToString()</li>
+                                <li class="status-th">@day.Key</li>
                             </td>
 
-                            @if (Model.WeekDayStatus.ContainsKey(day.Value) && Model.WeekDayStatus[day.Value] >= 3)
+                            @if (Model.WeekDayStatus.ContainsKey(day.Key.ToString()) && Model.WeekDayStatus[day.Key.ToString()] >= 3)
                             {
                                 <td>
                                     <label><i class="bi bi-x-circle-fill text-danger"></i></label>
@@ -102,7 +104,7 @@
 
                             @foreach (var group in Model.Schedule)
                             {
-                                if (day.Value == group.Key)
+                                if (day.Key.ToString() == group.Key)
                                 {
                                     <td>
 
@@ -121,7 +123,7 @@
                 </tbody>
             </table>
 
-            @if (Model.WaiterWorkingDays.Count() > 0)
+            @if (Model.WaiterWorkingDates.Count() > 0)
             {
                 <input type="submit" class="btn btn-primary" value="Update">
                 <input asp-page-handler="reset" type="submit" class="btn btn-danger" value="Reset">
@@ -134,18 +136,20 @@
         </form>
     </div>
     <div class="col-12 col-md-4 mt-4">
-        @if (Model.WaiterWorkingDays.Count() > 0)
+        @if (Model.WaiterWorkingDates.Count() > 0)
         {
             <table class="table w-50" style="background-color: #grey;color: #fff;">
                 <tbody>
                     <tr>
                         <th>SELECTED DAYS</th>
                     </tr>
-                    @foreach (var days in Model.WaiterWorkingDays)
+                    @foreach (var days in Model.WaiterWorkingDates)
                     {
                         <tr>
                             <td>
-                                @days
+                                
+                                @DateTime.Parse(days).DayOfWeek
+                                @days 
                             </td>
                         </tr>
                     }
