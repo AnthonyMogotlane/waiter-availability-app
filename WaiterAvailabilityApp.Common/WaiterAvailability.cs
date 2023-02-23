@@ -50,7 +50,6 @@ public class WaiterAvailability : IWaiterAvailability
 
             foreach (var day in checkedDays)
             {
-                System.Console.WriteLine(day);
                 connection.Execute(
                     @"INSERT INTO schedule (day_id, waiter_id, dates) VALUES (@DayId, @WaiterId, @Dates)",
                     new { DayId = 1, WaiterId = waiterId, Dates = day });
@@ -58,16 +57,6 @@ public class WaiterAvailability : IWaiterAvailability
         };
     }
 
-    // public List<Schedule> GetSchedule()
-    // {
-    //     using (var connection = new NpgsqlConnection(ConnectionString))
-    //     {
-    //         return connection.Query<Schedule>(@"
-    //                 SELECT w.firstname, wd.day FROM weekdays wd
-    //                 INNER JOIN schedule s ON wd.id = s.day_id
-    //                 INNER JOIN waiters w ON w.id = s.waiter_id").ToList();
-    //     }
-    // }
     public List<Schedule> GetSchedule()
     {
         using (var connection = new NpgsqlConnection(ConnectionString))
@@ -90,7 +79,7 @@ public class WaiterAvailability : IWaiterAvailability
     {
         using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
         {
-            connection.Execute(@"INSERT INTO waiters (firstname, password) VALUES (@FirstName, @Password)", new { FirstName = name, Password = password});
+            connection.Execute(@"INSERT INTO waiters (firstname, password) VALUES (@FirstName, @Password)", new { FirstName = name, Password = password });
         }
     }
 
@@ -116,6 +105,22 @@ public class WaiterAvailability : IWaiterAvailability
             connection.Execute(@"DELETE FROM schedule WHERE waiter_id = @WaiterId", new { WaiterId = waiterId });
         }
     }
+    public void ResertDates(string name, Dictionary<DateOnly, DayOfWeek> dates)
+    {
+        using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
+        {
+            var result = connection.QueryFirst(
+                @"SELECT * FROM waiters WHERE firstname = @FirstName",
+                new { FirstName = name });
+
+            int waiterId = result.id;
+
+            foreach (var date in dates)
+            {
+                connection.Execute(@"DELETE FROM schedule WHERE waiter_id = @WaiterId and dates = @Date", new { WaiterId = waiterId, Date = date.Key.ToString() });
+            }
+        }
+    }
 
     public List<Weekday> GetWeekdays()
     {
@@ -127,44 +132,42 @@ public class WaiterAvailability : IWaiterAvailability
 
     public List<Weekday> WaiterWorkingDays(string name)
     {
-        using(var connection = new NpgsqlConnection(ConnectionString))
+        using (var connection = new NpgsqlConnection(ConnectionString))
         {
             return connection.Query<Weekday>(@"
                     SELECT wd.id, wd.day, w.firstname FROM weekdays wd
                     INNER JOIN schedule s ON wd.id = s.day_id
                     INNER JOIN waiters w ON w.id = s.waiter_id
-                    WHERE w.firstname = @FirstName", new { FirstName = name}).ToList();
+                    WHERE w.firstname = @FirstName", new { FirstName = name }).ToList();
         }
     }
     public List<Schedule> WaiterWorkingDates(string name)
     {
-        using(var connection = new NpgsqlConnection(ConnectionString))
+        using (var connection = new NpgsqlConnection(ConnectionString))
         {
             return connection.Query<Schedule>(@"
              SELECT s.id, w.firstname, s.dates FROM schedule s
              INNER JOIN waiters w ON w.id = s.waiter_id
-             WHERE w.firstname = @FirstName", new { FirstName = name}).ToList();
+             WHERE w.firstname = @FirstName", new { FirstName = name }).ToList();
         }
     }
-    
-
+      
     public bool CheckUsername(string name)
     {
-        using(var connection = new NpgsqlConnection(ConnectionString))
+        using (var connection = new NpgsqlConnection(ConnectionString))
         {
             return connection.Query<Waiter>(@"SELECT * FROM waiters
-                WHERE firstname = @FirstName", new {FirstName = name}).ToList().Count > 0 ? true : false;
-            
+                WHERE firstname = @FirstName", new { FirstName = name }).ToList().Count > 0 ? true : false;
         }
     }
 
     public bool CheckValidUser(string name, string password)
     {
-         using(var connection = new NpgsqlConnection(ConnectionString))
+        using (var connection = new NpgsqlConnection(ConnectionString))
         {
             return connection.Query<Waiter>(@"SELECT * FROM waiters
-                WHERE firstname = @FirstName and password = @Password" , new {FirstName = name, Password = password}).ToList().Count > 0 ? true : false;
-            
+                WHERE firstname = @FirstName and password = @Password", new { FirstName = name, Password = password }).ToList().Count > 0 ? true : false;
+
         }
     }
 }

@@ -7,6 +7,7 @@ public interface IWaiterAvailability
     List<Schedule> GetSchedule();
     void ClearSchedule();
     void ResertDays(string name);
+    void ResertDates(string name, Dictionary<DateOnly, DayOfWeek> dates);
     List<Weekday> GetWeekdays();
     List<Weekday> WaiterWorkingDays(string name);
     bool CheckUsername(string name);
