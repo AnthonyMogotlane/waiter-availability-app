@@ -22,11 +22,13 @@ public class WaiterModel : PageModel
     public IEnumerable<string> WaiterWorkingDates { get; set; }
     public IEnumerable<IGrouping<string?, Schedule>> Schedule { get; set; }
     public Dictionary<string, int> WeekDayStatus { get; set; }
+
+    [BindProperty(SupportsGet = true)]
     public int Start { get; set; }
     public int End { get; set; }
 
+    public int Week { get; set; }
     public Dictionary<DateOnly, DayOfWeek> weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, 0, 7);
-
 
     public WaiterModel(ILogger<WaiterModel> logger, IWaiterAvailability waiter)
     {
@@ -41,42 +43,67 @@ public class WaiterModel : PageModel
         WeekDayStatus = new Dictionary<string, int>();
         foreach (var group in Schedule) WeekDayStatus.Add(group.Key!, group.Count());
     }
-    public void GetWaitrsWorkingDates() => 
+    public void GetWaitersWorkingDates() =>
         WaiterWorkingDates = _waiter.WaiterWorkingDates(FirstName!).Select(x => x.Dates)!;
+
+    public void ResertDates()
+    {
+        End = DateTimeLib.Start + 7;
+
+        weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, DateTimeLib.Start, End);
+        _waiter.ResertDates(WaiterFirstName, weekdays);
+    }
 
     public void OnGet()
     {
         // Get session value
         FirstName = HttpContext.Session.GetString("_FirstName");
+        // End of the week to be 7 days from start
+        End = Start + 7;
+        Week = DateTimeLib.Week;
 
-        GetWaitrsWorkingDates();
+        if (Start != 0 && Start % 7 == 0)
+        {
+            weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, Start, End);
+        }
+        if (Start == 0)
+        {
+            DateTimeLib.Start = 0;
+        }
+        // Selected waiter working days
+        GetWaitersWorkingDates();
+        // Status of the day
         GetWeekDayStatus();
+
     }
 
     public IActionResult OnPost()
     {
+
         // Get session value
         FirstName = HttpContext.Session.GetString("_FirstName");
 
         if (FirstName == null)
         {
-            GetWaitrsWorkingDates();
+            GetWaitersWorkingDates();
             GetWeekDayStatus();
             TempData["login"] = "login";
             return Page();
         }
         else if (SelectedDays.Count > 0 && SelectedDays.Count <= 5)
         {
-            _waiter.ResertDays(FirstName!);
+            // Remove selected days for current state
+            ResertDates();
+
             _waiter.AddToScheduleWithDates(FirstName!, SelectedDays);
-            GetWaitrsWorkingDates();
+            GetWaitersWorkingDates();
             GetWeekDayStatus();
             TempData["submit"] = "Days submitted successfully";
             return Page();
         }
         else
         {
-            GetWaitrsWorkingDates();
+            GetWaitersWorkingDates();
             GetWeekDayStatus();
             TempData["message"] = "Minimum days to work is 1, Maximum days to work is 5";
             return Page();
@@ -85,24 +112,38 @@ public class WaiterModel : PageModel
 
     public IActionResult OnPostReset()
     {
-        _waiter.ResertDays(WaiterFirstName);
-        GetWaitrsWorkingDates();
+        // Remove selected days for current state
+        System.Console.WriteLine(DateTimeLib.Start);
+
+        ResertDates();
+
+        GetWaitersWorkingDates();
         TempData["reset"] = "Days reseted successfully";
 
         return Redirect($"/Waiter");
     }
 
+    // Move to previous week
+    public IActionResult OnPostPrev()
+    {
+        if (DateTimeLib.Start > 0)
+        {
+            DateTimeLib.DecrementStart();
+            DateTimeLib.DecrementWeek();
+        }
+
+        return Redirect($"/Waiter?start={DateTimeLib.Start}");
+    }
+
+    // Move to following week
     public IActionResult OnPostNext()
     {
-        Start = 7;
-        End = 14;
-        
-        HttpContext.Session.SetString("_FirstName", WaiterFirstName);
-        System.Console.WriteLine(HttpContext.Session.GetString("_FirstName"));
-        weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, 7, 14);
-        GetWeekDayStatus();
-        GetWaitrsWorkingDates();
-       
-        return Redirect($"/Waiter");
+        if (DateTimeLib.Start < 21)
+        {
+            DateTimeLib.IncrementStart();
+            DateTimeLib.IncrementWeek();
+        }
+
+        return Redirect($"/Waiter?start={DateTimeLib.Start}");
     }
 }
