@@ -86,3 +86,8 @@ li {
 
 /* Dropdown workaround */
 .dropdown:hover .dropdown-menu {display: block;}
+
+.btn-none {
+  background: none;
+  border: none;
+}
