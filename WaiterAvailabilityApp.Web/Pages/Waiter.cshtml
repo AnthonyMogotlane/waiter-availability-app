@@ -10,7 +10,7 @@
         <div class="card text-dark p-4 modal-pop">
             <p>You need to login to select days</p>
             <a class="btn btn-success" asp-page="/Login">login</a>
-            <a class="nav-link text-primary mt-3" asp-page="/Index"><i class="bi bi-arrow-left"></i> Home</a>
+            <a class="nav-link text-primary mt-3" asp-page="/Index"><i class="bi bi-arrow-left"></i>Home</a>
         </div>
     </div>
 }
@@ -48,7 +48,8 @@ else if (TempData["message"] != null)
             </form>
             <div class="w-100">
             <h3>Hi @Model.FirstName</h3>
-            <p>Select your working days, for week @Model.Week </p>
+            <p>Select your working days, </p>
+            <p>February 2023 - Week @Model.Week</p>
 
             <form method="post" >
                 <input type="hidden" name="WaiterFirstName" value="@Model.FirstName">
@@ -153,7 +154,6 @@ else if (TempData["message"] != null)
                         {
                             <tr>
                                 <td>
-                                    
                                     @DateTime.Parse(days).DayOfWeek
                                     @days 
                                 </td>
