@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WaiterAvailabilityApp;
+using WaiterAvailabilityApp.Lib;
 using WaiterAvailabilityApp.Model;
 
 namespace WaiterAvailabilityApp.Pages;
@@ -8,29 +9,26 @@ public class ScheduleModel : PageModel
 {
     private readonly ILogger<ScheduleModel> _logger;
     private IWaiterAvailability _waiter;
-    public string? FirstName { get; set; }
     public ScheduleModel(ILogger<ScheduleModel> logger, IWaiterAvailability waiter)
     {
         _logger = logger;
         _waiter = waiter;
     }
 
+    public string? FirstName { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public int Start { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public int Week { get; set; }
+    public int End { get; set; }
+
     [TempData]
-    public string View { get; set; }
+    public string? View { get; set; }
 
-    public List<string> weekdays = new List<string>()
-    {
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday"
-    };
-
-    // Schedule - weekly waiter shift
-    public IEnumerable<IGrouping<string?, Schedule>> Schedule { get; set; }
+    public Dictionary<DateOnly, DayOfWeek> weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, 0, 7);
+    public IEnumerable<IGrouping<string?, Schedule>>? Schedule { get; set; }
 
     public void OnGet()
     {
@@ -38,12 +36,24 @@ public class ScheduleModel : PageModel
 
         if (FirstName != null)
         {
-            Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
+            End = Start + 7;
+
+            if (Start != 0 && Start % 7 == 0)
+            {
+                weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, Start, End);
+            }
+            if (Start == 0 || Week == 0)
+            {
+                DateTimeLib.Start = 0;
+                DateTimeLib.GetCurrentWeek();
+                Week = DateTimeLib.Week;
+            }
+            Schedule = _waiter.GetSchedule().GroupBy(x => x.Dates);
         }
         else
         {
             TempData["login"] = "Please login first to see the schedule";
-            Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
+            Schedule = _waiter.GetSchedule().GroupBy(x => x.Dates);
         }
     }
 
@@ -52,7 +62,7 @@ public class ScheduleModel : PageModel
         if (HttpContext.Session.GetString("_FirstName") != null)
         {
             _waiter.ClearSchedule(); // Clear from the database
-            Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
+            Schedule = _waiter.GetSchedule().GroupBy(x => x.Dates);
             TempData["success"] = "Schedule cleared successfully";
             return Page();
         }
@@ -73,16 +83,25 @@ public class ScheduleModel : PageModel
         return Page();
     }
 
-    public IActionResult OnPostTable()
+    // Move to previous week
+    public IActionResult OnPostPrev()
     {
-        Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
-        View = "Table";
-        return Page();
+        if (DateTimeLib.Start > 0)
+        {
+            DateTimeLib.DecrementStart();
+            DateTimeLib.DecrementWeek();
+        }
+        return Redirect($"/Schedule?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
     }
-    public IActionResult OnPostBoard()
+
+    // Move to following week
+    public IActionResult OnPostNext()
     {
-        Schedule = _waiter.GetSchedule().GroupBy(x => x.Day);
-        View = "Board";
-        return Page();
+        if (DateTimeLib.Start < 21)
+        {
+            DateTimeLib.IncrementStart();
+            DateTimeLib.IncrementWeek();
+        }
+        return Redirect($"/Schedule?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
     }
 }

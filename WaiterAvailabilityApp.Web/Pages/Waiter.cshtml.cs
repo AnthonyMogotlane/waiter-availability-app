@@ -15,10 +15,8 @@ public class WaiterModel : PageModel
     [BindProperty]
     public string WaiterFirstName { get; set; }
 
-
     [BindProperty]
     public List<string> SelectedDays { get; set; } // To hold selected days by the waiter
-    public IEnumerable<string> WaiterWorkingDays { get; set; }
     public IEnumerable<string> WaiterWorkingDates { get; set; }
     public IEnumerable<IGrouping<string?, Schedule>> Schedule { get; set; }
     public Dictionary<string, int> WeekDayStatus { get; set; }
@@ -27,6 +25,7 @@ public class WaiterModel : PageModel
     public int Start { get; set; }
     public int End { get; set; }
 
+    [BindProperty(SupportsGet = true)]
     public int Week { get; set; }
     public Dictionary<DateOnly, DayOfWeek> weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, 0, 7);
 
@@ -58,10 +57,9 @@ public class WaiterModel : PageModel
     {
         // Get session value
         FirstName = HttpContext.Session.GetString("_FirstName");
+
         // End of the week to be 7 days from start
         End = Start + 7;
-        Week = DateTimeLib.Week;
-
         if (Start != 0 && Start % 7 == 0)
         {
             weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, Start, End);
@@ -69,12 +67,13 @@ public class WaiterModel : PageModel
         if (Start == 0)
         {
             DateTimeLib.Start = 0;
+            DateTimeLib.GetCurrentWeek();
+            Week = DateTimeLib.Week;
         }
         // Selected waiter working days
         GetWaitersWorkingDates();
         // Status of the day
         GetWeekDayStatus();
-
     }
 
     public IActionResult OnPost()
@@ -113,8 +112,6 @@ public class WaiterModel : PageModel
     public IActionResult OnPostReset()
     {
         // Remove selected days for current state
-        System.Console.WriteLine(DateTimeLib.Start);
-
         ResertDates();
 
         GetWaitersWorkingDates();
@@ -132,7 +129,7 @@ public class WaiterModel : PageModel
             DateTimeLib.DecrementWeek();
         }
 
-        return Redirect($"/Waiter?start={DateTimeLib.Start}");
+        return Redirect($"/Waiter?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
     }
 
     // Move to following week
@@ -144,6 +141,6 @@ public class WaiterModel : PageModel
             DateTimeLib.IncrementWeek();
         }
 
-        return Redirect($"/Waiter?start={DateTimeLib.Start}");
+        return Redirect($"/Waiter?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
     }
 }
