@@ -11,7 +11,7 @@ static public class DateTimeLib
     static CalendarWeekRule calendarWeekRule = cultureInfo.DateTimeFormat.CalendarWeekRule;
     static DayOfWeek firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
     // Get week number
-    public static int Week { get; set; } = calendar.GetWeekOfYear( DateTime.Now, calendarWeekRule, firstDayOfWeek);
+    public static int Week { get; set; }
     static public int Start { get; set; }
 
 
@@ -30,6 +30,11 @@ static public class DateTimeLib
 
     static public void IncrementStart() => Start += 7;
     static public void DecrementStart() => Start -= 7;
+
+    static public void GetCurrentWeek()
+    {
+        Week = calendar.GetWeekOfYear( DateTime.Now, calendarWeekRule, firstDayOfWeek);
+    }
     static public void IncrementWeek() => Week += 1;
     static public void DecrementWeek() => Week -= 1;
 }
