@@ -152,12 +152,15 @@ else if (TempData["message"] != null)
                         </tr>
                         @foreach (var days in Model.WaiterWorkingDates)
                         {
+                                @if(Model.weekdays.ContainsKey(@DateOnly.FromDateTime(DateTime.Parse(days))))
+                                {
                             <tr>
-                                <td>
-                                    @DateTime.Parse(days).DayOfWeek
-                                    @days 
-                                </td>
+                                    <td>
+                                        @DateTime.Parse(days).DayOfWeek
+                                        @days
+                                    </td>
                             </tr>
+                                }
                         }
                     </tbody>
                 </table>
