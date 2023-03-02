@@ -129,7 +129,7 @@ public class WaiterAvailability : IWaiterAvailability
             return connection.Query<Weekday>(@"SELECT * FROM weekdays").ToList();
         }
     }
-
+    
     public List<Weekday> WaiterWorkingDays(string name)
     {
         using (var connection = new NpgsqlConnection(ConnectionString))

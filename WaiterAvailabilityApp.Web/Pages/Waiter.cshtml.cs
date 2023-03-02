@@ -18,6 +18,7 @@ public class WaiterModel : PageModel
     [BindProperty]
     public List<string> SelectedDays { get; set; } // To hold selected days by the waiter
     public IEnumerable<string> WaiterWorkingDates { get; set; }
+    public List<string> CurrentWorkingDates { get; set; }
     public IEnumerable<IGrouping<string?, Schedule>> Schedule { get; set; }
     public Dictionary<string, int> WeekDayStatus { get; set; }
 
@@ -28,6 +29,8 @@ public class WaiterModel : PageModel
     [BindProperty(SupportsGet = true)]
     public int Week { get; set; }
     public Dictionary<DateOnly, DayOfWeek> weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, 0, 7);
+    [TempData]
+    public string WeekLimits { get; set; }
 
     public WaiterModel(ILogger<WaiterModel> logger, IWaiterAvailability waiter)
     {
@@ -35,7 +38,7 @@ public class WaiterModel : PageModel
         _waiter = waiter;
     }
 
-    // Get how many waiters have booked for that day
+    // Get how many waiters have booked for that day/date
     public void GetWeekDayStatus()
     {
         Schedule = _waiter.GetSchedule().GroupBy(x => x.Dates);
@@ -45,12 +48,30 @@ public class WaiterModel : PageModel
     public void GetWaitersWorkingDates() =>
         WaiterWorkingDates = _waiter.WaiterWorkingDates(FirstName!).Select(x => x.Dates)!;
 
+    // Reset current state selected dates method
     public void ResertDates()
     {
         End = DateTimeLib.Start + 7;
-
         weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, DateTimeLib.Start, End);
         _waiter.ResertDates(WaiterFirstName, weekdays);
+    }
+
+    // Filter selected days for the current state
+    public void GetCurrentWorkingDates()
+    {
+        WaiterWorkingDates = _waiter.WaiterWorkingDates(FirstName!).Select(x => x.Dates)!;
+        weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, DateTimeLib.Start, End);
+        List<string> listOfDates = new List<string>();
+
+        foreach (var item in WaiterWorkingDates)
+        {
+            if(weekdays.ContainsKey(DateOnly.FromDateTime(DateTime.Parse(item))))
+            {
+                listOfDates.Add(item);
+            }
+        }
+
+        CurrentWorkingDates = listOfDates;
     }
 
     public void OnGet()
@@ -60,6 +81,7 @@ public class WaiterModel : PageModel
 
         // End of the week to be 7 days from start
         End = Start + 7;
+
         if (Start != 0 && Start % 7 == 0)
         {
             weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, Start, End);
@@ -70,8 +92,10 @@ public class WaiterModel : PageModel
             DateTimeLib.GetCurrentWeek();
             Week = DateTimeLib.Week;
         }
+
         // Selected waiter working days
         GetWaitersWorkingDates();
+        GetCurrentWorkingDates();
         // Status of the day
         GetWeekDayStatus();
     }
@@ -85,6 +109,7 @@ public class WaiterModel : PageModel
         if (FirstName == null)
         {
             GetWaitersWorkingDates();
+            GetCurrentWorkingDates();
             GetWeekDayStatus();
             TempData["login"] = "login";
             return Page();
@@ -96,6 +121,7 @@ public class WaiterModel : PageModel
 
             _waiter.AddToScheduleWithDates(FirstName!, SelectedDays);
             GetWaitersWorkingDates();
+            GetCurrentWorkingDates();
             GetWeekDayStatus();
             TempData["submit"] = "Days submitted successfully";
             return Page();
@@ -103,6 +129,7 @@ public class WaiterModel : PageModel
         else
         {
             GetWaitersWorkingDates();
+            GetCurrentWorkingDates();
             GetWeekDayStatus();
             TempData["message"] = "Minimum days to work is 1, Maximum days to work is 5";
             return Page();
@@ -115,9 +142,10 @@ public class WaiterModel : PageModel
         ResertDates();
 
         GetWaitersWorkingDates();
+        GetCurrentWorkingDates();
         TempData["reset"] = "Days reseted successfully";
 
-        return Redirect($"/Waiter");
+        return Redirect($"/Waiter?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
     }
 
     // Move to previous week
@@ -127,6 +155,10 @@ public class WaiterModel : PageModel
         {
             DateTimeLib.DecrementStart();
             DateTimeLib.DecrementWeek();
+        }
+        else
+        {
+            WeekLimits = $"You can only select your working days from week {DateTimeLib.Week}";
         }
 
         return Redirect($"/Waiter?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
@@ -139,6 +171,10 @@ public class WaiterModel : PageModel
         {
             DateTimeLib.IncrementStart();
             DateTimeLib.IncrementWeek();
+        }
+        else
+        {
+            WeekLimits = $"You can only select your working days till week {DateTimeLib.Week}";
         }
 
         return Redirect($"/Waiter?start={DateTimeLib.Start}&week={DateTimeLib.Week}");

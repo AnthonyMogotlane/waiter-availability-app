@@ -29,6 +29,8 @@ public class ScheduleModel : PageModel
 
     public Dictionary<DateOnly, DayOfWeek> weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, 0, 7);
     public IEnumerable<IGrouping<string?, Schedule>>? Schedule { get; set; }
+    [TempData]
+    public string WeekLimits { get; set; }
 
     public void OnGet()
     {
@@ -91,6 +93,10 @@ public class ScheduleModel : PageModel
             DateTimeLib.DecrementStart();
             DateTimeLib.DecrementWeek();
         }
+        else
+        {
+            WeekLimits = $"You can only see weekly schedule from week {DateTimeLib.Week}";
+        }
         return Redirect($"/Schedule?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
     }
 
@@ -102,6 +108,11 @@ public class ScheduleModel : PageModel
             DateTimeLib.IncrementStart();
             DateTimeLib.IncrementWeek();
         }
+        else
+        {
+            WeekLimits = $"You can only see weekly schedule till week {DateTimeLib.Week}";
+        }
+
         return Redirect($"/Schedule?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
     }
 }

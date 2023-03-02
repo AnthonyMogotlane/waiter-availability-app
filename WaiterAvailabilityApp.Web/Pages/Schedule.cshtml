@@ -26,6 +26,14 @@
     </script>
 }
 
+@if (@Model.WeekLimits != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.error("@Model.WeekLimits");
+    </script>
+}
 
 <div class="row d-flex justify-content-center">
 
@@ -37,14 +45,14 @@
 
         <div class="w-100 d-flex justify-content-center align-items-center flex-column">
             <h1 class="display-4 text-center status-th">Schedule</h1>
-            <p class="text-center">Weekly Waiter's Shifts</p>
-            <p class="text-center">February 2023 - Week @Model.Week</p>
+            <p class="text-center lead">Weekly Waiter's Shifts</p>
+            <p class="text-center bg-light text-dark rounded w-100">@DateTime.Now.ToString("MMMM") @DateTime.Now.Year - Week @Model.Week</p>
 
             @* Select the table or board view*@
-            <div class="dropdown mb-3 z-1">
-                @* <button class="btn btn-secondary dropdown-toggle view-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            @* <div class="dropdown mb-3 z-1">
+                <button class="btn btn-secondary dropdown-toggle view-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     View
-                </button> *@
+                </button>
 
                 <form method="post">
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -53,7 +61,7 @@
                         <button class="dropdown-item" asp-page-handler="Board">Board</button>
                     </div>
                 </form>
-            </div>
+            </div> *@
 
             @if(Model.View == "Board")
             {

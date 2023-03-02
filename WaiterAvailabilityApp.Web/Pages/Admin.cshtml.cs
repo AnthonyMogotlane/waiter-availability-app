@@ -21,6 +21,7 @@ public class AdminModel : PageModel
     [BindProperty]
     public List<string> SelectedDays { get; set; } // To hold selected days by the waiter
     public IEnumerable<string> WaiterWorkingDates { get; set; }
+    public List<string> CurrentWorkingDates { get; set; }
     public IEnumerable<IGrouping<string?, Schedule>> Schedule { get; set; }
     public Dictionary<string, int> WeekDayStatus { get; set; }
 
@@ -31,6 +32,8 @@ public class AdminModel : PageModel
     [BindProperty(SupportsGet = true)]
     public int Week { get; set; }
     public Dictionary<DateOnly, DayOfWeek> weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, 0, 7);
+    [TempData]
+    public string? WeekLimits { get; set; }
     
     public AdminModel(ILogger<AdminModel> logger, IWaiterAvailability waiter)
     {
@@ -53,7 +56,24 @@ public class AdminModel : PageModel
         End = DateTimeLib.Start + 7;
 
         weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, DateTimeLib.Start, End);
-        _waiter.ResertDates(WaiterFirstName, weekdays);
+        _waiter.ResertDates(HttpContext.Session.GetString("_WaiterAccountName")!, weekdays);
+    }
+
+     public void GetCurrentWorkingDates()
+    {
+        WaiterWorkingDates = _waiter.WaiterWorkingDates(WaiterAccountName!).Select(x => x.Dates)!;
+        weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, DateTimeLib.Start, End);
+        List<string> listOfDates = new List<string>();
+
+        foreach (var item in WaiterWorkingDates)
+        {
+            if(weekdays.ContainsKey(DateOnly.FromDateTime(DateTime.Parse(item))))
+            {
+                listOfDates.Add(item);
+            }
+        }
+
+        CurrentWorkingDates = listOfDates;
     }
 
     public void OnGet()
@@ -77,19 +97,21 @@ public class AdminModel : PageModel
         }
         // Selected waiter working days
         GetWaitersWorkingDates();
+        GetCurrentWorkingDates();
         // Status of the day
         GetWeekDayStatus();
+        
     }
 
     public IActionResult OnPost()
     {
-
         // Get WaiterAccountName session value
         WaiterAccountName = HttpContext.Session.GetString("_WaiterAccountName")!;
 
         if (WaiterAccountName == null)
         {
             GetWaitersWorkingDates();
+            GetCurrentWorkingDates();
             GetWeekDayStatus();
             TempData["login"] = "login";
             return Page();
@@ -101,6 +123,7 @@ public class AdminModel : PageModel
 
             _waiter.AddToScheduleWithDates(WaiterAccountName!, SelectedDays);
             GetWaitersWorkingDates();
+            GetCurrentWorkingDates();
             GetWeekDayStatus();
             TempData["submit"] = "Days submitted successfully";
             return Page();
@@ -108,6 +131,7 @@ public class AdminModel : PageModel
         else
         {
             GetWaitersWorkingDates();
+            GetCurrentWorkingDates();
             GetWeekDayStatus();
             TempData["message"] = "Minimum days to work is 1, Maximum days to work is 5";
             return Page();
@@ -120,9 +144,10 @@ public class AdminModel : PageModel
         ResertDates();
 
         GetWaitersWorkingDates();
+        GetCurrentWorkingDates();
         TempData["reset"] = "Days reseted successfully";
 
-        return Redirect($"/Waiter");
+        return Redirect($"/Admin?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
     }
 
     // Move to previous week
@@ -132,6 +157,10 @@ public class AdminModel : PageModel
         {
             DateTimeLib.DecrementStart();
             DateTimeLib.DecrementWeek();
+        }
+        else
+        {
+            WeekLimits = $"You can only modify working days from week {DateTimeLib.Week}";
         }
 
         return Redirect($"/Admin?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
@@ -144,6 +173,10 @@ public class AdminModel : PageModel
         {
             DateTimeLib.IncrementStart();
             DateTimeLib.IncrementWeek();
+        }
+        else
+        {
+            WeekLimits = $"You can only modify working days till week {DateTimeLib.Week}";
         }
 
         return Redirect($"/Admin?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
