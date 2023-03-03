@@ -32,6 +32,13 @@ public class ScheduleModel : PageModel
     [TempData]
     public string WeekLimits { get; set; }
 
+    // Reset current week
+    public void ResertDates()
+    {
+        End = DateTimeLib.Start + 7;
+        weekdays = DateTimeLib.ListOfWeekDayAndDates(DateTime.Now, DateTimeLib.Start, End);
+    }
+
     public void OnGet()
     {
         FirstName = HttpContext.Session.GetString("_FirstName");
@@ -66,10 +73,30 @@ public class ScheduleModel : PageModel
             _waiter.ClearSchedule(); // Clear from the database
             Schedule = _waiter.GetSchedule().GroupBy(x => x.Dates);
             TempData["success"] = "Schedule cleared successfully";
-            return Page();
+            return Redirect($"/Schedule?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
         }
         else
         {
+            Schedule = _waiter.GetSchedule().GroupBy(x => x.Dates);
+            TempData["login"] = "Please login first to see the schedule";
+            return Page();
+        }
+    }
+
+    public IActionResult OnPostClearWeek()
+    {
+        if (HttpContext.Session.GetString("_FirstName") != null)
+        {
+            ResertDates();
+
+            _waiter.ClearCurrentWeek(weekdays); // Clear from the database
+            Schedule = _waiter.GetSchedule().GroupBy(x => x.Dates);
+            TempData["success"] = $"Week {DateTimeLib.Week} cleared successfully";
+            return Redirect($"/Schedule?start={DateTimeLib.Start}&week={DateTimeLib.Week}");
+        }
+        else
+        {
+            Schedule = _waiter.GetSchedule().GroupBy(x => x.Dates);
             TempData["login"] = "Please login first to see the schedule";
             return Page();
         }

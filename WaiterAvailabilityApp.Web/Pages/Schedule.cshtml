@@ -139,11 +139,17 @@
                     </tbody>
                 </table>
             }
-
-            <form asp-page-handler="clear" method="post"
-                onclick="return confirm('Are you sure you want to clear schedule')">
-                <button class="btn btn-danger">Clear Schedule</button>
-            </form>
+            <div class="d-flex">
+                <form asp-page-handler="ClearWeek" method="post"
+                    onclick="return confirm('Are you sure you want to clear this week schedule')">
+                    <button class="btn btn-danger">Clear Week</button>
+                </form>
+                <div>&nbsp;</div>
+                <form asp-page-handler="Clear" method="post"
+                    onclick="return confirm('Are you sure you want to clear schedule')">
+                    <button class="btn btn-danger">Clear Schedule</button>
+                </form>
+            </div>
 
         </div>
 
