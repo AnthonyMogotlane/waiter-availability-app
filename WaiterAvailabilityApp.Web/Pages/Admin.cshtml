@@ -7,22 +7,22 @@
 @if (TempData["login"] != null || Model.FirstName == null)
 {
     <div class="modal-container d-flex justify-content-center align-items-center login-row">
-        <div class="card text-dark p-4 modal-pop">
-            <p>You need to login to select days</p>
-            <a class="btn btn-success" asp-page="/Login">login</a>
-            <a class="nav-link text-primary mt-3" asp-page="/Index"><i class="bi bi-arrow-left"></i>Home</a>
-        </div>
+    <div class="card text-dark p-4 modal-pop">
+        <p>You need to login to select days</p>
+        <a class="btn btn-success" asp-page="/Login">login</a>
+        <a class="nav-link text-primary mt-3" asp-page="/Index"><i class="bi bi-arrow-left"></i>Home</a>
     </div>
+</div>
 }
 
-   
+
 @if (@Model.WeekLimits != null)
 {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script type="text/javascript">
-        toastr.error("@Model.WeekLimits");
-    </script>
+    toastr.error("@Model.WeekLimits");
+</script>
 }
 
 @if (TempData["submit"] != null)
@@ -30,38 +30,40 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script type="text/javascript">
-        toastr.success('@TempData["submit"]');
-    </script>
+    toastr.success('@TempData["submit"]');
+</script>
 }
 else if (TempData["reset"] != null)
 {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script type="text/javascript">
-        toastr.success('@TempData["reset"]');
-    </script>
+    toastr.success('@TempData["reset"]');
+</script>
 }
 else if (TempData["message"] != null)
 {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script type="text/javascript">
-        toastr.error('@TempData["message"]');
-    </script>
+    toastr.error('@TempData["message"]');
+</script>
 }
 
 <div class="waiter-container">
     <div class="row d-flex justify-content-center">
         <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
             <form method="post">
-                <button asp-page-handler="prev" class="btn-none"><i class="bi bi-arrow-left-circle-fill text-light"></i></button>
+                <button asp-page-handler="prev" class="btn-none"><i
+                        class="bi bi-arrow-left-circle-fill text-light"></i></button>
             </form>
             <div class="w-100">
-            <h3>@Model.WaiterAccountName's account</h3>
-            <p class="lead">Update @Model.WaiterAccountName's selected working days</p>
-            <p class="text-center bg-light text-dark rounded">@DateTime.Now.ToString("MMMM") @DateTime.Now.Year - Week @Model.Week</p>
+                <h3>@Model.WaiterAccountName's account</h3>
+                <p class="lead">Update @Model.WaiterAccountName's selected working days</p>
+                <p class="text-center bg-light text-dark rounded">@DateTime.Now.ToString("MMMM") @DateTime.Now.Year -
+                    Week @Model.Week</p>
 
-            <form method="post">
+                <form method="post">
                     <input type="hidden" name="WaiterFirstName" value="@Model.FirstName">
                     <table class="table table-borderless bg-light rounded bg-primary">
                         <thead>

@@ -105,10 +105,11 @@ public class AdminModel : PageModel
 
     public IActionResult OnPost()
     {
+        FirstName = HttpContext.Session.GetString("_FirstName");
         // Get WaiterAccountName session value
         WaiterAccountName = HttpContext.Session.GetString("_WaiterAccountName")!;
 
-        if (WaiterAccountName == null)
+        if (FirstName == null)
         {
             GetWaitersWorkingDates();
             GetCurrentWorkingDates();
