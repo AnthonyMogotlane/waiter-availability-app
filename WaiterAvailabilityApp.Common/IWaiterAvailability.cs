@@ -14,4 +14,5 @@ public interface IWaiterAvailability
     bool CheckValidUser(string name, string password);
     void AddToScheduleWithDates(string firstName, List<string> checkedDays);
     List<Schedule> WaiterWorkingDates(string name);
+     public void ClearCurrentWeek(Dictionary<DateOnly, DayOfWeek> dates);
 }

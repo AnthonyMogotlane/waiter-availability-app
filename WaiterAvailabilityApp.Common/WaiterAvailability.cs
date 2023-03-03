@@ -75,6 +75,18 @@ public class WaiterAvailability : IWaiterAvailability
         }
     }
 
+    public void ClearCurrentWeek(Dictionary<DateOnly, DayOfWeek> dates)
+    {
+        using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
+        {
+            foreach (var date in dates)
+            {
+                connection.Execute(@"DELETE FROM schedule WHERE dates = @Date", new { Date = date.Key.ToString() });
+            }
+        }
+    }
+
+
     public void AddName(string name, string password)
     {
         using (NpgsqlConnection connection = new NpgsqlConnection(ConnectionString))
