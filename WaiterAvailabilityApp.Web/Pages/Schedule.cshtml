@@ -26,108 +26,136 @@
     </script>
 }
 
+@if (@Model.WeekLimits != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.error("@Model.WeekLimits");
+    </script>
+}
 
 <div class="row d-flex justify-content-center">
 
-    <div class="col-12 col-md-8">
-        <h1 class="display-4 text-center status-th">Schedule</h1>
-        <p class="text-center">Weekly Waiter's Shifts</p>
+    <div class="col-12 col-md-8 d-flex justify-content-center align-items-center">
 
-        @* Select the table or board view*@
-        <div class="dropdown mb-3 z-1">
-            <button class="btn btn-secondary dropdown-toggle view-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                View
-            </button>
+        <form method="post">
+            <button asp-page-handler="prev" class="btn-none"><i class="bi bi-arrow-left-circle-fill text-light"></i></button>
+        </form>
 
-            <form method="post">
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <button class="dropdown-item" asp-page-handler="Table">Table</button>
-                    <div class="dropdown-divider"></div>
-                    <button class="dropdown-item" asp-page-handler="Board">Board</button>
-                </div>
-            </form>
-        </div>
+        <div class="w-100 d-flex justify-content-center align-items-center flex-column">
+            <h1 class="display-4 text-center status-th">Schedule</h1>
+            <p class="text-center lead">Weekly Waiter's Shifts</p>
+            <p class="text-center bg-light text-dark rounded w-100">@DateTime.Now.ToString("MMMM") @DateTime.Now.Year - Week @Model.Week</p>
 
-        @if(Model.View == "Board")
-        {
-            <table class="table w-50 table-bordered bg-light rounded">
-                <thead>
-                    <tr class="text-center">
-                        <th style="width: 50%;"><i class="bi bi-calendar-event-fill"></i></th>
-                        <th style="width: 50%;"><i class="bi bi-person-badge-fill"></i></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var day in Model.weekdays)
-                    {
-                        <tr class="border-top">
-                            <td class="bg-light text-center">
-                                <h5 class="status-th">@day</h5>
-                            </td>
-                            @foreach (var group in Model.Schedule)
-                            {
-                                if (@group.Key == day)
-                                {
-                                    <td class="text-center">
-                                    @foreach (var waiter in group)
-                                    {
-                                            <form asp-page-handler="account" method="post">
-                                                <button class="btn-waiter name-color">@waiter.FirstName</button>
-                                                <input type="hidden" name="name" value="@waiter.FirstName">
-                                            </form>
-                                    }
-                                    </td>
-                                }
-                            }
+            @* Select the table or board view*@
+            @* <div class="dropdown mb-3 z-1">
+                <button class="btn btn-secondary dropdown-toggle view-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    View
+                </button>
+
+                <form method="post">
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <button class="dropdown-item" asp-page-handler="Table">Table</button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" asp-page-handler="Board">Board</button>
+                    </div>
+                </form>
+            </div> *@
+
+            @if(Model.View == "Board")
+            {
+                <table class="table w-50 table-bordered bg-light rounded">
+                    <thead>
+                        <tr class="text-center">
+                            <th style="width: 50%;"><i class="bi bi-calendar-event-fill"></i></th>
+                            <th style="width: 50%;"><i class="bi bi-person-badge-fill"></i></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <table class="table table-borderless bg-light rounded">
-                <thead>
-                    <tr class="text-center">
-                        <th style="width: 25%;"><i class="bi bi-calendar-event-fill"></i></th>
-                        <th style="width: 25%;"><i class="bi bi-person-badge-fill"></i></th>
-                        <th style="width: 25%;"><i class="bi bi-person-badge-fill"></i></th>
-                        <th style="width: 25%;"><i class="bi bi-person-badge-fill"></i></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var day in Model.weekdays)
-                    {
-                        <tr class="border-top">
-                            <td class="bg-light text-center">
-                                <h5 class="status-th">@day</h5>
-                            </td>
-                            @foreach (var group in Model.Schedule)
-                            {
-                                if (@group.Key == day)
+                    </thead>
+                    <tbody>
+                        @foreach (var day in Model.weekdays)
+                        {
+                            <tr class="border-top">
+                                <td class="bg-light text-center">
+                                    <li class="status-th bold">@day.Value</li>
+                                    <li>@day.Key</li>
+                                </td>
+                                @foreach (var group in Model.Schedule)
                                 {
-                                    @foreach (var waiter in group)
+                                    if (@group.Key == day.Key.ToString())
                                     {
                                         <td class="text-center">
+                                        @foreach (var waiter in group)
+                                        {
                                             <form asp-page-handler="account" method="post">
                                                 <button class="btn-waiter name-color">@waiter.FirstName</button>
                                                 <input type="hidden" name="name" value="@waiter.FirstName">
                                             </form>
+                                        }
                                         </td>
                                     }
                                 }
-                            }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <table class="table table-borderless bg-light rounded">
+                    <thead>
+                        <tr class="text-center">
+                            <th style="width: 25%;"><i class="bi bi-calendar-event-fill"></i></th>
+                            <th style="width: 25%;"><i class="bi bi-person-badge-fill"></i></th>
+                            <th style="width: 25%;"><i class="bi bi-person-badge-fill"></i></th>
+                            <th style="width: 25%;"><i class="bi bi-person-badge-fill"></i></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        }
+                    </thead>
+                    <tbody>
+                        @foreach (var day in Model.weekdays)
+                        {
+                            <tr class="border-top">
+                                <td class="bg-light text-center">
+                                    <li class="status-th bold">@day.Value</li>
+                                    <li>@day.Key</li>
+                                </td>
+                                @foreach (var group in Model.Schedule)
+                                {
+                                    if (@group.Key == day.Key.ToString())
+                                    {
+                                        @foreach (var waiter in group)
+                                        {
+                                            <td class="text-center">
+                                                <form asp-page-handler="account" method="post">
+                                                    <button class="btn-waiter name-color">@waiter.FirstName</button>
+                                                    <input type="hidden" name="name" value="@waiter.FirstName">
+                                                </form>
+                                            </td>
+                                        }
+                                    }
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            <div class="d-flex">
+                <form asp-page-handler="ClearWeek" method="post"
+                    onclick="return confirm('Are you sure you want to clear this week schedule')">
+                    <button class="btn btn-danger">Clear Week</button>
+                </form>
+                <div>&nbsp;</div>
+                <form asp-page-handler="Clear" method="post"
+                    onclick="return confirm('Are you sure you want to clear schedule')">
+                    <button class="btn btn-danger">Clear Schedule</button>
+                </form>
+            </div>
 
-        <form asp-page-handler="clear" method="post"
-            onclick="return confirm('Are you sure you want to clear schedule')">
-            <button class="btn btn-danger">Clear Schedule</button>
+        </div>
+
+        <form method="post">
+            <button asp-page-handler="next" class="btn-none"><i class="bi bi-arrow-right-circle-fill text-light"></i></button>
         </form>
-
     </div>
 </div>
 
