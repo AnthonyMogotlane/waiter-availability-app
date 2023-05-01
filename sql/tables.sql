@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS schedule (
     id serial PRIMARY KEY,
     day_id int NOT NULL,
     waiter_id int NOT NULL,
+    dates varchar(30) NOT NULL,
     FOREIGN KEY (day_id) REFERENCES weekdays(id),
     FOREIGN KEY (waiter_id) REFERENCES waiters(id)
 );
