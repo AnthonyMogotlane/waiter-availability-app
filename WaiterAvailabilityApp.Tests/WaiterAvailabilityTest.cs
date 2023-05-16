@@ -31,6 +31,7 @@ public class WaiterAvailabilityTest
         using (var connection = new NpgsqlConnection(GetConnectionString()))
         {
             connection.Execute(File.ReadAllText("../../../../sql/tables.sql"));
+            connection.Execute(File.ReadAllText("../../../../sql/insertWeekdays.sql"));
         }
     }
 
