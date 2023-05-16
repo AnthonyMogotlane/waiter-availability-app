@@ -10,11 +10,6 @@ public class WaiterAvailability : IWaiterAvailability
     public WaiterAvailability(string connectionString)
     {
         this.ConnectionString = connectionString;
-
-        using (var connection = new NpgsqlConnection(connectionString))
-        {
-            connection.Execute(File.ReadAllText("../sql/tables.sql"));
-        }
     }
 
     // Add to Schedule table
