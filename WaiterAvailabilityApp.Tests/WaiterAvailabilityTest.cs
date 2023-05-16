@@ -10,14 +10,14 @@ namespace WaiterAvailabilityApp.Tests;
 
 public class WaiterAvailabilityTest
 {
-    static string cs = "Host=localhost;Username=postgres;Password=0000;Database=test_db";
+    static string cs = "Host=localhost;Username=postgres;Password=0000;Database=test_db;IncludeErrorDetail=true";
     static string GetConnectionString()
     {
         var csEnv = Environment.GetEnvironmentVariable("PSQLConnectionString");
-        if(csEnv == null) csEnv = cs;
+        if (csEnv == null) csEnv = cs;
         return csEnv;
     }
-    
+
     public void DropTables()
     {
         using (var connection = new NpgsqlConnection(GetConnectionString()))
@@ -31,16 +31,10 @@ public class WaiterAvailabilityTest
         using (var connection = new NpgsqlConnection(GetConnectionString()))
         {
             connection.Execute(File.ReadAllText("../../../../sql/tables.sql"));
-        }
-    }
-
-    public void PopulateWeekDays()
-    {
-        using (var connection = new NpgsqlConnection(GetConnectionString()))
-        {
             connection.Execute(File.ReadAllText("../../../../sql/insertWeekdays.sql"));
         }
     }
+
 
     [Fact]
     public void ShouldBeAbleToAddWaitersName()
@@ -49,7 +43,6 @@ public class WaiterAvailabilityTest
         var waiterAvailability = new WaiterAvailability(GetConnectionString());
         DropTables();
         CreateTables();
-        PopulateWeekDays();
         using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
@@ -70,7 +63,6 @@ public class WaiterAvailabilityTest
         var waiterAvailability = new WaiterAvailability(GetConnectionString());
         DropTables();
         CreateTables();
-        PopulateWeekDays();
         using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
@@ -92,16 +84,14 @@ public class WaiterAvailabilityTest
         var waiterAvailability = new WaiterAvailability(GetConnectionString());
         DropTables();
         CreateTables();
-        PopulateWeekDays();
         using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
         waiterAvailability.AddName("Anthony", "anthony123");
 
-        waiterAvailability.AddToSchedule("Anthony", new List<int>() { 1, 2, 3 });
-        var expected = connection.Query<Schedule>(@" 
-                    SELECT w.firstname, wd.day FROM weekdays wd
-                    INNER JOIN schedule s ON wd.id = s.day_id
+        waiterAvailability.AddToScheduleWithDates("Anthony", new List<string>() { "02/03/23", "03/03/23" });
+        var expected = connection.Query<Schedule>(@"
+                    SELECT w.firstname, s.dates FROM schedule s
                     INNER JOIN waiters w ON w.id = s.waiter_id").ToList();
         // When
         var actual = waiterAvailability.GetSchedule();
@@ -116,7 +106,6 @@ public class WaiterAvailabilityTest
         var waiterAvailability = new WaiterAvailability(GetConnectionString());
         DropTables();
         CreateTables();
-        PopulateWeekDays();
         using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
@@ -135,22 +124,19 @@ public class WaiterAvailabilityTest
         var waiterAvailability = new WaiterAvailability(GetConnectionString());
         DropTables();
         CreateTables();
-        PopulateWeekDays();
         using var connection = new NpgsqlConnection(GetConnectionString());
         connection.Open();
 
-        waiterAvailability.AddName("Anthony", "anthony123");
+        waiterAvailability.AddName("John", "mog123");
 
-        waiterAvailability.AddToSchedule("Anthony", new List<int>() { 1, 2, 3 });
-
-        var expected = connection.Query<Weekday>(@" 
-                    SELECT wd.id, wd.day, w.firstname FROM weekdays wd
-                    INNER JOIN schedule s ON wd.id = s.day_id
-                    INNER JOIN waiters w ON w.id = s.waiter_id
-                    WHERE w.firstname = 'Anthony'");
+        waiterAvailability.AddToScheduleWithDates("John", new List<string>() { "02/03/23", "03/03/23" });
+        var expected = connection.Query<Schedule>(@"
+             SELECT s.id, w.firstname, s.dates FROM schedule s
+             INNER JOIN waiters w ON w.id = s.waiter_id
+             WHERE w.firstname = 'John'").ToList();
 
         // When
-        var actual = waiterAvailability.WaiterWorkingDays("Anthony");
+        var actual = waiterAvailability.WaiterWorkingDates("John");
         // Then
         Assert.Equal(JsonSerializer.Serialize(expected), JsonSerializer.Serialize(actual));
     }

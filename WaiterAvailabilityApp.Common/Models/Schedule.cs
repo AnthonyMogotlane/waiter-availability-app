@@ -8,4 +8,6 @@ public class Schedule
     public string? FirstName { get; set; }
     [Required]
     public string? Day { get; set; }
+    [Required]
+    public string? Dates { get; set; }
 }
