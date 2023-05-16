@@ -3,16 +3,6 @@ CREATE TABLE IF NOT EXISTS weekdays(
     day VARCHAR(50) NOT NULL UNIQUE
 );
 
--- Populating weekdays
-INSERT INTO weekdays (day) VALUES 
-    ('Monday'),
-    ('Tuesday'),
-    ('Wednesday'),
-    ('Thursday'),
-    ('Friday'),
-    ('Saturday'),
-    ('Sunday');
-
 CREATE TABLE IF NOT EXISTS waiters (
     id serial PRIMARY KEY,
     firstname VARCHAR(50) NOT NULL,
