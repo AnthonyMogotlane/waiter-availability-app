@@ -44,7 +44,6 @@ public class LoginModel : PageModel
             }
             else
             {
-                System.Console.WriteLine("test");
                 TempData["invalidName"] = "You have entered invalid login name or password";
                 Waiter.FirstName = "";
             }

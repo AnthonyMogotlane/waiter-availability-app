@@ -20,8 +20,6 @@ namespace WaiterAvailabilityApp.Pages
         {
             if(ModelState.IsValid)
             {
-            System.Console.WriteLine(Waiter.FirstName);
-            System.Console.WriteLine(Waiter.Password);
                 if(!_waiter.CheckUsername(Waiter.FirstName!))
                 {
                     _waiter.AddName(Waiter.FirstName!, Waiter.Password!);
