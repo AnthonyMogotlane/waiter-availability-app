@@ -1,9 +1,15 @@
 # Waiter Availability App
 [![.NET](https://github.com/AnthonyMogotlane/waiter-availability-app/actions/workflows/dotnet.yml/badge.svg)](https://github.com/AnthonyMogotlane/waiter-availability-app/actions/workflows/dotnet.yml)
 
-Waiter-Availability-App is an application to help restaurant managers to schedule weekly waiters shifts, it allows waiters to select days they can work on and update days they can work on. The manager can see how many waiters are available to work on and reset the schedule for a new week.
+The Waiter-Availability-App is designed to assist restaurant managers in creating weekly schedules for waiters. It enables waiters to indicate their preferred working days and make updates as needed. The app provides managers with an overview of the number of available waiters for each day and allows the manager to reset the schedule for that week up to four weeks.
 
-<img width="209" src="https://anthonymogotlane.github.io/logic-gates/waiters-app/screen-two.png" />
+<div style="display: flex;">
+<img width="209" src="https://firebasestorage.googleapis.com/v0/b/anthonymogotlane.appspot.com/o/waiters-screen-1.png?alt=media&token=32424004-2249-48cc-9b8f-dfa6ad38d033" />
+
+<img width="209" src="https://firebasestorage.googleapis.com/v0/b/anthonymogotlane.appspot.com/o/waiters-screen-2.png?alt=media&token=32424004-2249-48cc-9b8f-dfa6ad38d033" />
+
+<img width="209" src="https://firebasestorage.googleapis.com/v0/b/anthonymogotlane.appspot.com/o/waiters-screen-3.png?alt=media&token=32424004-2249-48cc-9b8f-dfa6ad38d033" />
+ </div>
 
 ## Technologies
 Project is created with: 
@@ -27,25 +33,26 @@ To run the app on your local computer:
   * Install Postgresql: 
   [postgresql installation guide](https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-20-04-quickstart)
   * Create tables below using postgresql
-  ![Schema Snapshot](https://anthonymogotlane.github.io/logic-gates/waiters-app/database.png)
   ```
-    CREATE TABLE IF NOT EXISTS weekdays(
-        id serial PRIMARY KEY,
-        day VARCHAR(50) NOT NULL
-    );
+   CREATE TABLE IF NOT EXISTS weekdays(
+     id serial PRIMARY KEY,
+     day VARCHAR(50) NOT NULL UNIQUE
+   );
 
-    CREATE TABLE IF NOT EXISTS waiters (
-        id serial PRIMARY KEY,
-        firstname VARCHAR(50) NOT NULL
-    );
+   CREATE TABLE IF NOT EXISTS waiters (
+       id serial PRIMARY KEY,
+       firstname VARCHAR(50) NOT NULL,
+       password VARCHAR(50) NOT NULL
+   );
 
-    CREATE TABLE IF NOT EXISTS schedule (
-        id serial PRIMARY KEY,
-        day_id int NOT NULL,
-        waiter_id int NOT NULL,
-        FOREIGN KEY (day_id) REFERENCES weekdays(id),
-        FOREIGN KEY (waiter_id) REFERENCES waiters(id)
-    );
+   CREATE TABLE IF NOT EXISTS schedule (
+       id serial PRIMARY KEY,
+       day_id int NOT NULL,
+       waiter_id int NOT NULL,
+       dates varchar(30) NOT NULL,
+       FOREIGN KEY (day_id) REFERENCES weekdays(id),
+       FOREIGN KEY (waiter_id) REFERENCES waiters(id)
+   );
   ```
   
   * Move to `razor-pages/WaiterAvailabilityApp` directory, create `appsettings.json` file and add the connection string as shown below:
