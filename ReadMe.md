@@ -4,11 +4,11 @@
 The Waiter-Availability-App is designed to assist restaurant managers in creating weekly schedules for waiters. It enables waiters to indicate their preferred working days and make updates as needed. The app provides managers with an overview of the number of available waiters for each day and allows the manager to reset the schedule for that week up to four weeks.
 
 <div style="display: flex;">
-<img width="209" src="https://firebasestorage.googleapis.com/v0/b/anthonymogotlane.appspot.com/o/waiters-screen-1.png?alt=media&token=32424004-2249-48cc-9b8f-dfa6ad38d033" />
+ <img width="209" src="https://firebasestorage.googleapis.com/v0/b/anthonymogotlane.appspot.com/o/waiters-screen-1.png?alt=media&token=32424004-2249-48cc-9b8f-dfa6ad38d033" />
 
-<img width="209" src="https://firebasestorage.googleapis.com/v0/b/anthonymogotlane.appspot.com/o/waiters-screen-2.png?alt=media&token=32424004-2249-48cc-9b8f-dfa6ad38d033" />
+ <img width="209" src="https://firebasestorage.googleapis.com/v0/b/anthonymogotlane.appspot.com/o/waiters-screen-2.png?alt=media&token=32424004-2249-48cc-9b8f-dfa6ad38d033" />
 
-<img width="209" src="https://firebasestorage.googleapis.com/v0/b/anthonymogotlane.appspot.com/o/waiters-screen-3.png?alt=media&token=32424004-2249-48cc-9b8f-dfa6ad38d033" />
+ <img width="209" src="https://firebasestorage.googleapis.com/v0/b/anthonymogotlane.appspot.com/o/waiters-screen-3.png?alt=media&token=32424004-2249-48cc-9b8f-dfa6ad38d033" />
  </div>
 
 ## Technologies
