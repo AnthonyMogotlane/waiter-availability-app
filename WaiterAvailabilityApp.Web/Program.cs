@@ -2,20 +2,14 @@ using WaiterAvailabilityApp;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddSecretsManager(configurator: options =>
-{
-    options.KeyGenerator = (_, s) => s;
-});
-
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddSingleton<IWaiterAvailability, WaiterAvailability>(x =>
-    new WaiterAvailability(builder.Configuration["ConnString__DefaultConnection"]));
+builder.Services.AddSingleton<IWaiterAvailability, WaiterAvailability>(x => 
+    new WaiterAvailability(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configure a session
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(opt =>
-{
+builder.Services.AddSession(opt => {
     opt.IdleTimeout = TimeSpan.FromSeconds(30);
 });
 
